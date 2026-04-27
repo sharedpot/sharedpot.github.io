@@ -72,6 +72,8 @@ async function loadGroups() {
     const bounds = L.latLngBounds(state.groups.map((g) => [g.lat, g.lng]));
     map.fitBounds(bounds.pad(0.2));
   }
+  requestAnimationFrame(() => map.invalidateSize());
+  window.addEventListener("resize", () => map.invalidateSize());
   applyFilters();
 }
 

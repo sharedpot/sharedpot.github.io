@@ -6,9 +6,11 @@
 }
 
 body {
+  display: block;
   max-width: 100%;
   padding: 0;
   margin: 0;
+  grid-template-columns: none;
 }
 
 /* Override Simple.css banner-style header */
@@ -151,8 +153,14 @@ body > main {
 .badge.whatsapp { background: var(--wa); }
 .badge.signal { background: var(--sg); }
 
-.join-link {
+.join-link,
+.join-link:link,
+.join-link:visited,
+.join-link:hover,
+.join-link:focus,
+.join-link:active {
   align-self: flex-start;
+  display: inline-block;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
@@ -160,5 +168,6 @@ body > main {
   border-radius: 0.25rem;
   background: var(--accent, #1976d2);
   color: #111;
+  line-height: 1.3;
 }
 .join-link:hover { opacity: 0.9; }
