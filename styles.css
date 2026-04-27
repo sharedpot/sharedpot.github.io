@@ -1,13 +1,24 @@
 :root,
 :root[data-theme] {
+  color-scheme: light;
   --tg: #229ED9;
   --wa: #25D366;
   --sg: #3A76F0;
   --container: min(100% - 2rem, 1400px);
   --accent: #E66B3D;
-  --accent-bg: #1d1d1d;
   --accent-hover: #cf5a30;
   --accent-text: #fff;
+  --bg: #FFF8F1;
+  --text: #1f1f1f;
+  --text-light: #555;
+  --border: #ead8c7;
+  --accent-bg: #fff;
+  --card-bg: #fff;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
 }
 
 body {
@@ -103,16 +114,24 @@ body > main {
   margin: 0.25rem 0 0;
   min-height: 1.2em;
   font-size: 0.9rem;
-  color: #aaa;
+  color: var(--text-light);
+}
+
+#group-list li .address,
+#group-list li .distance {
+  color: var(--text-light);
 }
 
 #map {
   height: clamp(360px, 55vh, 600px);
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
   z-index: 0;
-  background: transparent;
+  background: #aadaff;
+  border: 1px solid var(--border);
+  overflow: hidden;
 }
+.leaflet-container { background: #aadaff !important; }
 
 #group-list {
   list-style: none;
@@ -133,18 +152,21 @@ body > main {
 }
 
 #group-list li {
-  padding: 0.75rem;
-  border: 1px solid transparent;
-  border-radius: 0.5rem;
-  background: transparent;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--card-bg);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 #group-list li:hover,
 #group-list li.active {
   border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(230,107,61,0.15);
 }
 #group-list li .row {
   display: flex;
