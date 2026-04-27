@@ -10,21 +10,23 @@ const state = {
   radiusKm: 0,
 };
 
-const WORLD_BOUNDS = L.latLngBounds([[-85, -180], [85, 180]]);
-
 const map = L.map("map", {
-  worldCopyJump: false,
-  maxBounds: WORLD_BOUNDS,
-  maxBoundsViscosity: 1.0,
+  worldCopyJump: true,
   minZoom: 2,
   maxZoom: 19,
 }).setView([20, 0], 2);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  noWrap: true,
-  bounds: WORLD_BOUNDS,
 }).addTo(map);
+
+const MAX_LAT = 78;
+map.on("drag", () => {
+  const c = map.getCenter();
+  if (c.lat > MAX_LAT || c.lat < -MAX_LAT) {
+    map.panTo([Math.max(-MAX_LAT, Math.min(MAX_LAT, c.lat)), c.lng], { animate: false });
+  }
+});
 
 const listEl = document.getElementById("group-list");
 const searchEl = document.getElementById("search");
