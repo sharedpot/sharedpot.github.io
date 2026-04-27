@@ -1,8 +1,13 @@
-:root {
+:root,
+:root[data-theme] {
   --tg: #229ED9;
   --wa: #25D366;
   --sg: #3A76F0;
   --container: min(100% - 2rem, 1400px);
+  --accent: #E66B3D;
+  --accent-bg: #1d1d1d;
+  --accent-hover: #cf5a30;
+  --accent-text: #fff;
 }
 
 body {
@@ -45,9 +50,21 @@ body > header nav a {
   text-decoration: none;
   font-weight: 600;
   border-radius: 0.3rem;
-  color: white;
-  background: var(--accent, #1976d2);
+  color: var(--accent-text);
+  background: var(--accent);
 }
+body > header nav a:hover { background: var(--accent-hover); }
+
+#controls button {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.3rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+#controls button:hover { background: var(--accent-hover); }
 
 /* Kill Simple.css section borders/padding */
 body > section {
@@ -93,7 +110,7 @@ body > main {
   width: 100%;
   border-radius: 0.5rem;
   z-index: 0;
-  background: #ddd;
+  background: transparent;
 }
 
 #group-list {
@@ -116,9 +133,9 @@ body > main {
 
 #group-list li {
   padding: 0.75rem;
-  border: 1px solid var(--border, #ddd);
+  border: 1px solid transparent;
   border-radius: 0.5rem;
-  background: var(--accent-bg, transparent);
+  background: transparent;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -126,7 +143,7 @@ body > main {
 }
 #group-list li:hover,
 #group-list li.active {
-  border-color: var(--accent, #1976d2);
+  border-color: var(--accent);
 }
 #group-list li .row {
   display: flex;
@@ -166,8 +183,8 @@ body > main {
   text-decoration: none;
   padding: 0.3rem 0.6rem;
   border-radius: 0.25rem;
-  background: var(--accent, #1976d2);
-  color: #111;
+  background: var(--accent);
+  color: var(--accent-text);
   line-height: 1.3;
 }
-.join-link:hover { opacity: 0.9; }
+.join-link:hover { background: var(--accent-hover); }
