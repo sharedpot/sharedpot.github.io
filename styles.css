@@ -2,9 +2,23 @@
   --tg: #229ED9;
   --wa: #25D366;
   --sg: #3A76F0;
+  --container: min(100% - 2rem, 1400px);
 }
 
-body { max-width: 1400px; }
+body {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body > header,
+body > section,
+body > main {
+  width: var(--container);
+  margin-inline: auto;
+}
+
+body > header { padding-block: 1.5rem 0.5rem; }
 header nav a { font-weight: 600; }
 
 #controls {
@@ -14,7 +28,12 @@ header nav a { font-weight: 600; }
   align-items: center;
   margin-bottom: 1rem;
 }
-#controls input[type="search"] { flex: 1 1 220px; }
+#controls input[type="search"] {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+#controls button,
+#controls select { flex: 0 0 auto; }
 #status {
   width: 100%;
   margin: 0;
@@ -28,18 +47,12 @@ main {
   grid-template-columns: 1fr;
   gap: 1rem;
   align-items: start;
-}
-@media (min-width: 800px) {
-  main { grid-template-columns: 3fr 2fr; }
-  #map {
-    position: sticky;
-    top: 1rem;
-  }
+  padding-bottom: 2rem;
 }
 
 #map {
-  height: 70vh;
-  min-height: 360px;
+  height: clamp(360px, 55vh, 600px);
+  width: 100%;
   border-radius: 0.5rem;
   z-index: 0;
 }
@@ -52,6 +65,16 @@ main {
   flex-direction: column;
   gap: 0.5rem;
 }
+
+@media (min-width: 960px) {
+  main { grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr); }
+  #map {
+    position: sticky;
+    top: 1rem;
+    height: clamp(420px, calc(100vh - 2rem), 820px);
+  }
+}
+
 #group-list li {
   padding: 0.75rem;
   border: 1px solid var(--border, #ddd);
@@ -71,6 +94,7 @@ main {
   justify-content: space-between;
   align-items: baseline;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 #group-list li h3 { margin: 0; font-size: 1rem; }
 #group-list li p { margin: 0; font-size: 0.9rem; opacity: 0.85; }
