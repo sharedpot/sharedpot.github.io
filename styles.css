@@ -4,7 +4,7 @@
   --sg: #3A76F0;
 }
 
-body { max-width: 1100px; }
+body { max-width: 1400px; }
 header nav a { font-weight: 600; }
 
 #controls {
@@ -27,13 +27,18 @@ main {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  align-items: start;
 }
 @media (min-width: 800px) {
   main { grid-template-columns: 3fr 2fr; }
+  #map {
+    position: sticky;
+    top: 1rem;
+  }
 }
 
 #map {
-  height: 60vh;
+  height: 70vh;
   min-height: 360px;
   border-radius: 0.5rem;
   z-index: 0;
@@ -43,8 +48,6 @@ main {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 60vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
