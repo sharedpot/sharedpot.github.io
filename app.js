@@ -10,11 +10,20 @@ const state = {
   radiusKm: 0,
 };
 
-const map = L.map("map").setView([20, 0], 2);
+const WORLD_BOUNDS = L.latLngBounds([[-85, -180], [85, 180]]);
+
+const map = L.map("map", {
+  worldCopyJump: false,
+  maxBounds: WORLD_BOUNDS,
+  maxBoundsViscosity: 1.0,
+  minZoom: 2,
+  maxZoom: 19,
+}).setView([20, 0], 2);
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 19,
-  minZoom: 2,
+  noWrap: true,
+  bounds: WORLD_BOUNDS,
 }).addTo(map);
 
 const listEl = document.getElementById("group-list");
