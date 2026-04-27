@@ -1,0 +1,42 @@
+[
+  {
+    "id": "berlin-kiez-cooks",
+    "name": "Berlin Kiez Cooks",
+    "description": "Neighbours sharing kitchens and recipes across Neukölln and Kreuzberg.",
+    "platform": "telegram",
+    "url": "https://t.me/+example-berlin",
+    "lat": 52.4900,
+    "lng": 13.4250,
+    "address": "Neukölln, Berlin, Germany"
+  },
+  {
+    "id": "brooklyn-communal-cooks",
+    "name": "Brooklyn Communal Cooks",
+    "description": "Weekly potlucks in north Brooklyn. All welcome.",
+    "platform": "whatsapp",
+    "url": "https://chat.whatsapp.com/example-brooklyn",
+    "lat": 40.7081,
+    "lng": -73.9571,
+    "address": "Williamsburg, Brooklyn, NY"
+  },
+  {
+    "id": "lisbon-cantina-popular",
+    "name": "Lisbon Cantina Popular",
+    "description": "Pop-up dinners around Alfama and Graça.",
+    "platform": "signal",
+    "url": "https://signal.group/#example-lisbon",
+    "lat": 38.7100,
+    "lng": -9.1300,
+    "address": "Alfama, Lisbon, Portugal"
+  },
+  {
+    "id": "tbilisi-supra-club",
+    "name": "Tbilisi Supra Club",
+    "description": "Casual supras in Vake and Vera. Bring a dish or a song.",
+    "platform": "telegram",
+    "url": "https://t.me/+example-tbilisi",
+    "lat": 41.7080,
+    "lng": 44.7800,
+    "address": "Vake, Tbilisi, Georgia"
+  }
+]

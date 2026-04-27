@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SharedPot</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>SharedPot</h1>
+    <p>A directory of local Telegram, WhatsApp, and Signal groups. Find one near you.</p>
+    <nav><a href="submit.html">Submit a group &rarr;</a></nav>
+  </header>
+
+  <section id="controls">
+    <input id="search" type="search" placeholder="Search by name, description, or place&hellip;" aria-label="Search">
+    <button id="locate" type="button">Find near me</button>
+    <select id="radius" aria-label="Radius">
+      <option value="0">Any distance</option>
+      <option value="5">Within 5 km</option>
+      <option value="25">Within 25 km</option>
+      <option value="100">Within 100 km</option>
+    </select>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <main>
+    <div id="map"></div>
+    <ul id="group-list" aria-label="Group list"></ul>
+  </main>
+</body>
+</html>

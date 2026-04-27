@@ -1,0 +1,100 @@
+:root {
+  --tg: #229ED9;
+  --wa: #25D366;
+  --sg: #3A76F0;
+}
+
+body { max-width: 1100px; }
+header nav a { font-weight: 600; }
+
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+#controls input[type="search"] { flex: 1 1 220px; }
+#status {
+  width: 100%;
+  margin: 0;
+  min-height: 1.2em;
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 800px) {
+  main { grid-template-columns: 3fr 2fr; }
+}
+
+#map {
+  height: 60vh;
+  min-height: 360px;
+  border-radius: 0.5rem;
+  z-index: 0;
+}
+
+#group-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#group-list li {
+  padding: 0.75rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 0.5rem;
+  background: var(--accent-bg, #fff);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+#group-list li:hover,
+#group-list li.active {
+  border-color: var(--accent, #1976d2);
+}
+#group-list li .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+#group-list li h3 { margin: 0; font-size: 1rem; }
+#group-list li p { margin: 0; font-size: 0.9rem; opacity: 0.85; }
+#group-list li .distance { font-size: 0.8rem; opacity: 0.7; white-space: nowrap; }
+#group-list li .address { font-size: 0.8rem; opacity: 0.7; }
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+.badge.telegram { background: var(--tg); }
+.badge.whatsapp { background: var(--wa); }
+.badge.signal { background: var(--sg); }
+
+.join-link {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.25rem;
+  background: var(--accent, #1976d2);
+  color: white;
+}
+.join-link:hover { opacity: 0.9; }
