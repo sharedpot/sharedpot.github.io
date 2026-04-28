@@ -20,11 +20,17 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-const MAX_LAT = 78;
-map.on("drag", () => {
+const MAX_LAT = 80;
+let clampingLat = false;
+map.on("move", () => {
+  if (clampingLat) return;
   const c = map.getCenter();
   if (c.lat > MAX_LAT || c.lat < -MAX_LAT) {
-    map.panTo([Math.max(-MAX_LAT, Math.min(MAX_LAT, c.lat)), c.lng], { animate: false });
+    clampingLat = true;
+    map.stop();
+    const clamped = c.lat > MAX_LAT ? MAX_LAT : -MAX_LAT;
+    map.setView([clamped, c.lng], map.getZoom(), { animate: false });
+    clampingLat = false;
   }
 });
 
