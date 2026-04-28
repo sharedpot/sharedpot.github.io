@@ -20,19 +20,24 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-const MAX_LAT = 80;
+const NORTH_LIMIT = 84;
+const SOUTH_LIMIT = -84;
 let clampingLat = false;
-map.on("move", () => {
+function clampVertical() {
   if (clampingLat) return;
-  const c = map.getCenter();
-  if (c.lat > MAX_LAT || c.lat < -MAX_LAT) {
-    clampingLat = true;
-    map.stop();
-    const clamped = c.lat > MAX_LAT ? MAX_LAT : -MAX_LAT;
-    map.setView([clamped, c.lng], map.getZoom(), { animate: false });
-    clampingLat = false;
-  }
-});
+  const bounds = map.getBounds();
+  const center = map.getCenter();
+  let shift = 0;
+  if (bounds.getNorth() > NORTH_LIMIT) shift = bounds.getNorth() - NORTH_LIMIT;
+  else if (bounds.getSouth() < SOUTH_LIMIT) shift = bounds.getSouth() - SOUTH_LIMIT;
+  if (shift === 0) return;
+  clampingLat = true;
+  map.stop();
+  map.setView([center.lat - shift, center.lng], map.getZoom(), { animate: false });
+  clampingLat = false;
+}
+map.on("move", clampVertical);
+map.on("zoomend", clampVertical);
 
 const listEl = document.getElementById("group-list");
 const searchEl = document.getElementById("search");
