@@ -12,6 +12,8 @@ const state = {
 
 const map = L.map("map", {
   worldCopyJump: true,
+  maxBounds: L.latLngBounds([[-85, -10000], [85, 10000]]),
+  maxBoundsViscosity: 1.0,
   minZoom: 2,
   maxZoom: 19,
 }).setView([20, 0], 2);
@@ -19,25 +21,6 @@ const map = L.map("map", {
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
-
-const NORTH_LIMIT = 84;
-const SOUTH_LIMIT = -84;
-let clampingLat = false;
-function clampVertical() {
-  if (clampingLat) return;
-  const bounds = map.getBounds();
-  const center = map.getCenter();
-  let shift = 0;
-  if (bounds.getNorth() > NORTH_LIMIT) shift = bounds.getNorth() - NORTH_LIMIT;
-  else if (bounds.getSouth() < SOUTH_LIMIT) shift = bounds.getSouth() - SOUTH_LIMIT;
-  if (shift === 0) return;
-  clampingLat = true;
-  map.stop();
-  map.setView([center.lat - shift, center.lng], map.getZoom(), { animate: false });
-  clampingLat = false;
-}
-map.on("move", clampVertical);
-map.on("zoomend", clampVertical);
 
 const listEl = document.getElementById("group-list");
 const searchEl = document.getElementById("search");
