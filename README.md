@@ -4,11 +4,14 @@ A static, dependency-free directory of local Telegram / WhatsApp / Signal commun
 
 ## What's in here
 
-- `index.html` — landing page with map, search, and "find near me".
-- `app.js` — Leaflet init, list rendering, search filter, geolocation + distance sort.
-- `styles.css` — layout overrides on top of Simple.css.
-- `groups.json` — the directory data; one object per group.
-- `submit.html` — page with an embedded Google Form for submissions.
+- `index.html` — landing page with map, search, "find near me", and category-toggle chips.
+- `about.html` — why and how to run/join a cooking circle (one page, three sections).
+- `submit.html` — embedded Google Form for community submissions.
+- `app.js` — Leaflet init, list rendering, search filter, geolocation + distance sort, category toggles persisted to localStorage.
+- `styles.css` — layout overrides on top of Simple.css; category colors.
+- `groups.json` — hand-curated cooking circles (the editorial heart of the site).
+- `food_resources.json` — auto-generated from `scripts/fetch_resources.py`. Don't edit by hand.
+- `scripts/fetch_resources.py` — pulls food-aid listings from public RSS feeds, geocodes via Nominatim.
 
 ## Run locally
 
@@ -20,13 +23,14 @@ python3 -m http.server 8000
 
 Open <http://localhost:8000>.
 
-## Add a group
+## Add a cooking circle
 
 1. Open `groups.json`.
 2. Append an object:
    ```json
    {
      "id": "kebab-case-unique",
+     "category": "circle",
      "name": "Friendly name",
      "description": "Short description.",
      "platform": "telegram",
@@ -37,8 +41,33 @@ Open <http://localhost:8000>.
    }
    ```
 3. Geocode the address at <https://nominatim.openstreetmap.org/> and copy the coordinates (4 decimals is fine).
-4. `platform` must be `telegram`, `whatsapp`, or `signal`.
+4. `platform` must be `telegram`, `whatsapp`, or `signal`. `category` must be `circle` for hand-curated entries.
 5. Commit and push — GitHub Pages redeploys automatically.
+
+## Refresh food-aid data
+
+`food_resources.json` is generated from public RSS feeds (currently foodpantries.org). To refresh:
+
+```bash
+uv run scripts/fetch_resources.py
+git add food_resources.json
+git commit -m "data: refresh food resources"
+git push
+```
+
+The script writes `scripts/.geocode_cache.json` and `scripts/.fetch_cache.json` (both gitignored) so reruns are fast. First run is slow because Nominatim allows 1 request/second.
+
+### Future: adding freefood.org
+
+freefood.org has no RSS feed, no sitemap, and aggressive bot filtering — scraping isn't viable. The legitimate path is to email `webmaster@freefood.org` and ask:
+
+> Subject: Mutual aid project asking for a data feed
+>
+> Hi! I run sharedpot.github.io, a small free directory of communal cooking circles. I'd like to also show food-aid resources from freefood.org as a separate, clearly-attributed category, with a click-through to your listing for full details. I see foodpantries.org has an RSS feed I'm using; do you have something similar — RSS, sitemap, or a CSV/JSON dump I could pull periodically? Happy to credit you and link back prominently.
+>
+> Thanks for keeping the directory running.
+
+If/when they reply with a feed, add a `FreeFoodOrg` source class to `scripts/fetch_resources.py` modeled on the existing `FoodPantriesOrg`, and add a third chip in `index.html`.
 
 ## Submission workflow
 
