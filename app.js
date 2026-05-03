@@ -1,4 +1,6 @@
 const PLATFORMS = ["telegram", "whatsapp", "signal"];
+const CATEGORIES = ["circle", "pantry", "free-food"];
+const STORAGE_KEY = "sharedpot:categories";
 
 const state = {
   groups: [],
@@ -8,6 +10,7 @@ const state = {
   userMarker: null,
   query: "",
   radiusKm: 0,
+  visibleCategories: loadCategoryPrefs(),
 };
 
 const map = L.map("map", {
@@ -27,6 +30,7 @@ const searchEl = document.getElementById("search");
 const locateBtn = document.getElementById("locate");
 const radiusEl = document.getElementById("radius");
 const statusEl = document.getElementById("status");
+const filterEls = document.querySelectorAll('#category-filters input[type="checkbox"]');
 
 function setStatus(msg) { statusEl.textContent = msg || ""; }
 
@@ -49,27 +53,100 @@ function haversineKm(a, b) {
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 
+function loadCategoryPrefs() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return new Set(CATEGORIES);
+    const arr = JSON.parse(raw);
+    return new Set(arr.filter((c) => CATEGORIES.includes(c)));
+  } catch {
+    return new Set(CATEGORIES);
+  }
+}
+
+function saveCategoryPrefs() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.visibleCategories]));
+  } catch { /* ignore quota errors */ }
+}
+
+function ctaLabel(g) {
+  return g.category === "circle" ? "Open chat &#8599;" : "Visit listing &#8599;";
+}
+
+function badgeHtml(g) {
+  if (g.category === "circle" && PLATFORMS.includes(g.platform)) {
+    return `<span class="badge ${g.platform}">${g.platform}</span>`;
+  }
+  if (g.category === "pantry") return `<span class="badge cat-pantry">Food pantry</span>`;
+  if (g.category === "free-food") return `<span class="badge cat-free-food">Free food</span>`;
+  return `<span class="badge cat-circle">Circle</span>`;
+}
+
+function sourceHtml(g) {
+  if (!g.source || !g.source.name) return "";
+  const url = g.source.url ? escapeHtml(g.source.url) : null;
+  const name = escapeHtml(g.source.name);
+  return `<p class="source-attribution">via ${url ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>` : name}</p>`;
+}
+
 function popupHtml(g) {
   return `
     <strong>${escapeHtml(g.name)}</strong><br>
-    <span class="badge ${g.platform}">${g.platform}</span>
+    ${badgeHtml(g)}
     <p style="margin: 0.5rem 0 0.5rem;">${escapeHtml(g.description || "")}</p>
-    <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">Open chat &#8599;</a>
+    ${sourceHtml(g)}
+    <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">${ctaLabel(g)}</a>
   `;
 }
 
+function markerIcon(category) {
+  const cls = CATEGORIES.includes(category) ? `cat-${category}` : "cat-circle";
+  return L.divIcon({
+    className: "cat-marker",
+    html: `<div class="cat-pin ${cls}"></div>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+    popupAnchor: [0, -12],
+  });
+}
+
+function normalize(entries, defaultCategory) {
+  return entries
+    .map((g) => ({ ...g, category: g.category || defaultCategory }))
+    .filter(
+      (g) =>
+        CATEGORIES.includes(g.category) &&
+        Number.isFinite(g.lat) &&
+        Number.isFinite(g.lng) &&
+        typeof g.id === "string"
+    );
+}
+
+async function fetchJson(path, optional) {
+  const res = await fetch(path, { cache: "no-cache" });
+  if (!res.ok) {
+    if (optional && res.status === 404) {
+      console.info(`${path} not found (yet) — skipping.`);
+      return [];
+    }
+    throw new Error(`Failed to load ${path} (${res.status})`);
+  }
+  return res.json();
+}
+
 async function loadGroups() {
-  const res = await fetch("groups.json", { cache: "no-cache" });
-  if (!res.ok) throw new Error(`Failed to load groups.json (${res.status})`);
-  const data = await res.json();
-  state.groups = data.filter(
-    (g) =>
-      PLATFORMS.includes(g.platform) &&
-      Number.isFinite(g.lat) &&
-      Number.isFinite(g.lng)
-  );
+  const [circles, foodResources] = await Promise.all([
+    fetchJson("groups.json").then((d) => normalize(d, "circle")),
+    fetchJson("food_resources.json", true).then((d) => normalize(d, "pantry")).catch((e) => {
+      console.warn("food_resources.json failed:", e);
+      return [];
+    }),
+  ]);
+  state.groups = [...circles, ...foodResources];
+
   for (const g of state.groups) {
-    const m = L.marker([g.lat, g.lng]).bindPopup(popupHtml(g));
+    const m = L.marker([g.lat, g.lng], { icon: markerIcon(g.category) }).bindPopup(popupHtml(g));
     m.on("click", () => highlightInList(g.id));
     state.markers.set(g.id, m);
     m.addTo(map);
@@ -86,7 +163,9 @@ async function loadGroups() {
 function applyFilters() {
   const q = state.query.trim().toLowerCase();
   const radius = state.radiusKm;
+  const cats = state.visibleCategories;
   let result = state.groups.filter((g) => {
+    if (!cats.has(g.category)) return false;
     if (q) {
       const hay = `${g.name} ${g.description || ""} ${g.address || ""}`.toLowerCase();
       if (!hay.includes(q)) return false;
@@ -125,7 +204,7 @@ function renderList() {
   listEl.innerHTML = "";
   if (state.filtered.length === 0) {
     const li = document.createElement("li");
-    li.textContent = "No groups match. Try a different search or wider radius.";
+    li.textContent = "No matches. Try a different search, wider radius, or enable more categories.";
     li.style.cursor = "default";
     listEl.appendChild(li);
     return;
@@ -139,11 +218,12 @@ function renderList() {
         <span class="distance">${g._distance != null ? g._distance.toFixed(1) + " km" : ""}</span>
       </div>
       <div class="row">
-        <span class="badge ${g.platform}">${g.platform}</span>
+        ${badgeHtml(g)}
         <span class="address">${escapeHtml(g.address || "")}</span>
       </div>
       <p>${escapeHtml(g.description || "")}</p>
-      <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">Open chat &#8599;</a>
+      ${sourceHtml(g)}
+      <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">${ctaLabel(g)}</a>
     `;
     li.addEventListener("click", (e) => {
       if (e.target.closest("a")) return;
@@ -175,6 +255,17 @@ radiusEl.addEventListener("change", () => {
   state.radiusKm = Number(radiusEl.value) || 0;
   applyFilters();
 });
+
+for (const cb of filterEls) {
+  const cat = cb.dataset.category;
+  cb.checked = state.visibleCategories.has(cat);
+  cb.addEventListener("change", () => {
+    if (cb.checked) state.visibleCategories.add(cat);
+    else state.visibleCategories.delete(cat);
+    saveCategoryPrefs();
+    applyFilters();
+  });
+}
 
 locateBtn.addEventListener("click", () => {
   if (!navigator.geolocation) {

@@ -1,6 +1,7 @@
 [
   {
     "id": "berlin-kiez-cooks",
+    "category": "circle",
     "name": "Berlin Kiez Cooks",
     "description": "Neighbours sharing kitchens and recipes across Neukölln and Kreuzberg.",
     "platform": "telegram",
@@ -11,6 +12,7 @@
   },
   {
     "id": "brooklyn-communal-cooks",
+    "category": "circle",
     "name": "Brooklyn Communal Cooks",
     "description": "Weekly potlucks in north Brooklyn. All welcome.",
     "platform": "whatsapp",
@@ -21,6 +23,7 @@
   },
   {
     "id": "lisbon-cantina-popular",
+    "category": "circle",
     "name": "Lisbon Cantina Popular",
     "description": "Pop-up dinners around Alfama and Graça.",
     "platform": "signal",
@@ -31,6 +34,7 @@
   },
   {
     "id": "tbilisi-supra-club",
+    "category": "circle",
     "name": "Tbilisi Supra Club",
     "description": "Casual supras in Vake and Vera. Bring a dish or a song.",
     "platform": "telegram",

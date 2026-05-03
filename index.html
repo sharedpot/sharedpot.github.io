@@ -14,8 +14,17 @@
   <header>
     <h1>SharedPot</h1>
     <p>A directory of local Telegram, WhatsApp, and Signal groups. Find one near you.</p>
-    <nav><a href="submit.html">Submit a group &rarr;</a></nav>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="submit.html">Submit a group &rarr;</a>
+    </nav>
   </header>
+
+  <fieldset id="category-filters">
+    <legend class="visually-hidden">Show categories</legend>
+    <label class="chip chip--circle"><input type="checkbox" data-category="circle" checked><span>Cooking circles</span></label>
+    <label class="chip chip--pantry"><input type="checkbox" data-category="pantry" checked><span>Food pantries</span></label>
+  </fieldset>
 
   <section id="controls">
     <input id="search" type="search" placeholder="Search by name, description, or place&hellip;" aria-label="Search">

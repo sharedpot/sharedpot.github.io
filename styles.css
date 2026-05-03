@@ -8,6 +8,9 @@
   --accent: #E66B3D;
   --accent-hover: #cf5a30;
   --accent-text: #fff;
+  --cat-circle: #E66B3D;
+  --cat-pantry: #0EA5E9;
+  --cat-free-food: #16A34A;
   --bg: #FFF8F1;
   --text: #1f1f1f;
   --text-light: #555;
@@ -192,6 +195,93 @@ body > main {
 .badge.telegram { background: var(--tg); }
 .badge.whatsapp { background: var(--wa); }
 .badge.signal { background: var(--sg); }
+.badge.cat-circle { background: var(--cat-circle); }
+.badge.cat-pantry { background: var(--cat-pantry); }
+.badge.cat-free-food { background: var(--cat-free-food); }
+
+#category-filters {
+  width: var(--container);
+  margin: 0 auto 0.5rem;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+#category-filters legend.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip::before {
+  content: "";
+  display: inline-block;
+  width: 0.7rem; height: 0.7rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+.chip--circle { color: var(--cat-circle); }
+.chip--pantry { color: var(--cat-pantry); }
+.chip--free-food { color: var(--cat-free-food); }
+.chip:has(input:checked) {
+  background: currentColor;
+  border-color: currentColor;
+}
+.chip:has(input:checked)::before { opacity: 1; background: white; }
+.chip:has(input:checked) span { color: white; }
+.chip span { color: var(--text); }
+.chip:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.source-attribution {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+.source-attribution a { color: inherit; }
+
+.leaflet-marker-icon.cat-marker {
+  background: transparent;
+  border: none;
+}
+.cat-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  transform: translate(-11px, -11px);
+}
+.cat-pin.cat-circle { background: var(--cat-circle); }
+.cat-pin.cat-pantry { background: var(--cat-pantry); }
+.cat-pin.cat-free-food { background: var(--cat-free-food); }
+
+article.prose {
+  width: var(--container);
+  margin: 0.5rem auto 3rem;
+  padding: 0;
+  max-width: 70ch;
+}
+article.prose h2 { margin-top: 2rem; }
+article.prose p { line-height: 1.6; }
+article.prose ul { line-height: 1.6; }
 
 .join-link,
 .join-link:link,
