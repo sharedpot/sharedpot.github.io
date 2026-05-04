@@ -276,6 +276,24 @@ body > main {
 .cat-pin.cat-pantry { background: var(--cat-pantry); }
 .cat-pin.cat-free-food { background: var(--cat-free-food); }
 
+.marker-cluster {
+  background: rgba(230, 107, 61, 0.25);
+}
+.marker-cluster div {
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+.marker-cluster span { line-height: 30px; }
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large { background: rgba(230, 107, 61, 0.25); }
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div { background: var(--accent); color: white; }
+
 article.prose {
   width: var(--container);
   margin: 0.5rem auto 3rem;

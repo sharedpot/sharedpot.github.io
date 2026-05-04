@@ -25,6 +25,14 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
+const cluster = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  spiderfyOnMaxZoom: true,
+  disableClusteringAtZoom: 14,
+  maxClusterRadius: 60,
+  chunkedLoading: true,
+}).addTo(map);
+
 const listEl = document.getElementById("group-list");
 const searchEl = document.getElementById("search");
 const locateBtn = document.getElementById("locate");
@@ -158,7 +166,7 @@ async function loadGroups() {
     const m = L.marker([g.lat, g.lng], { icon: markerIcon(g.category) }).bindPopup(popupHtml(g));
     m.on("click", () => highlightInList(g.id));
     state.markers.set(g.id, m);
-    m.addTo(map);
+    cluster.addLayer(m);
   }
   if (state.groups.length) {
     const bounds = L.latLngBounds(state.groups.map((g) => [g.lat, g.lng]));
@@ -201,12 +209,16 @@ function applyFilters() {
 
 function syncMarkerVisibility() {
   const visibleIds = new Set(state.filtered.map((g) => g.id));
+  const toAdd = [];
+  const toRemove = [];
   for (const [id, m] of state.markers) {
     const shouldBeVisible = visibleIds.has(id);
-    const isVisible = map.hasLayer(m);
-    if (shouldBeVisible && !isVisible) m.addTo(map);
-    else if (!shouldBeVisible && isVisible) map.removeLayer(m);
+    const isVisible = cluster.hasLayer(m);
+    if (shouldBeVisible && !isVisible) toAdd.push(m);
+    else if (!shouldBeVisible && isVisible) toRemove.push(m);
   }
+  if (toRemove.length) cluster.removeLayers(toRemove);
+  if (toAdd.length) cluster.addLayers(toAdd);
 }
 
 function renderList() {
@@ -239,8 +251,8 @@ function renderList() {
       if (e.target.closest("a")) return;
       const marker = state.markers.get(g.id);
       if (marker) {
-        map.setView([g.lat, g.lng], Math.max(map.getZoom(), 11));
-        marker.openPopup();
+        map.setView([g.lat, g.lng], Math.max(map.getZoom(), 14));
+        cluster.zoomToShowLayer(marker, () => marker.openPopup());
       }
       highlightInList(g.id);
     });
