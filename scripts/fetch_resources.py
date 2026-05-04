@@ -2,42 +2,55 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#   "feedparser>=6.0",
 #   "httpx>=0.27",
 #   "beautifulsoup4>=4.12",
 # ]
 # ///
 """
-Fetch food-aid resources and write them to ../food_resources.json.
+Crawl foodpantries.org and write listings to ../food_resources.json.
 
-v1: foodpantries.org RSS only.
+Site structure:
+  homepage          -> /st/<state-name>          (51 state pages)
+  /st/<state>       -> /ci/<state-abbr>-<city>   (cities)
+  /ci/<state-city>  -> /li/<listing-slug>        (listings)
+  /li/<slug>        -> JSON-LD with PostalAddress
 
 Usage:
-    uv run scripts/fetch_resources.py
+    uv run scripts/fetch_resources.py                 # full crawl (slow!)
+    uv run scripts/fetch_resources.py --state montana # one state
+    uv run scripts/fetch_resources.py --limit 50      # first 50 listings only
+    uv run scripts/fetch_resources.py --refresh-html  # ignore HTML cache
 
-Idempotent: rerunning merges by id and writes the same JSON if nothing changed.
+Caches HTML in scripts/.fetch_cache.json and geocoded addresses in
+scripts/.geocode_cache.json (both gitignored). Re-running merges by id —
+idempotent. Resumable: kill it any time, the cache picks up where it left off.
+
+Politeness: 1 second between HTTP requests. Nominatim is throttled to 1.1
+seconds. Full US crawl is several hours; one state is minutes.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
 import time
 from pathlib import Path
+from urllib.parse import urljoin, urlparse
 
-import feedparser
 import httpx
 from bs4 import BeautifulSoup
 
-UA = "Mozilla/5.0 (compatible; SharedPot/1.0; +https://sharedpot.github.io)"
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 OUTPUT = ROOT / "food_resources.json"
 GEOCODE_CACHE = SCRIPT_DIR / ".geocode_cache.json"
 FETCH_CACHE = SCRIPT_DIR / ".fetch_cache.json"
 
-# Browser-like headers — foodpantries.org returns 406 to bare requests
+BASE = "https://www.foodpantries.org"
+NOMINATIM = "https://nominatim.openstreetmap.org/search"
+
 BROWSER_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -46,12 +59,20 @@ BROWSER_HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
 }
+NOMINATIM_HEADERS = {
+    "User-Agent": "SharedPot/1.0 (+https://sharedpot.github.io)",
+    "Accept-Language": "en",
+}
 
 JSONLD_RE = re.compile(
     r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
     re.DOTALL | re.IGNORECASE,
 )
 LISTING_TYPES = {"LocalBusiness", "Organization", "Restaurant", "Place", "FoodEstablishment"}
+
+# 1 sec between requests. Bumped after observing 406s; foodpantries.org seems content with this.
+REQ_DELAY = 1.0
+NOMINATIM_DELAY = 1.1
 
 
 class Cache:
@@ -80,37 +101,39 @@ def html_to_text(html: str) -> str:
     return BeautifulSoup(html, "html.parser").get_text(" ", strip=True)
 
 
+def truncate(text: str, n: int = 280) -> str:
+    if len(text) <= n:
+        return text
+    cut = text[: n - 3].rsplit(" ", 1)[0]
+    return cut + "..."
+
+
 def extract_jsonld_listing(html: str) -> dict | None:
-    """Find a JSON-LD block describing the listing (LocalBusiness/Organization/etc.)."""
     for raw in JSONLD_RE.findall(html):
-        # Their JSON-LD has unescaped newlines/tabs inside string values; collapse whitespace.
         sanitized = re.sub(r"\s+", " ", raw).strip()
         try:
             obj = json.loads(sanitized)
         except json.JSONDecodeError:
             continue
-        # @type may be a string or list
-        ld_types = obj.get("@type")
-        if isinstance(ld_types, str):
-            ld_types = [ld_types]
-        if not ld_types:
-            continue
-        if not any(t in LISTING_TYPES for t in ld_types):
+        types = obj.get("@type")
+        if isinstance(types, str):
+            types = [types]
+        if not types or not any(t in LISTING_TYPES for t in types):
             continue
         if isinstance(obj.get("address"), dict):
             return obj
     return None
 
 
-def format_address(addr_obj: dict) -> str | None:
-    if not isinstance(addr_obj, dict):
+def format_address(addr: dict) -> str | None:
+    if not isinstance(addr, dict):
         return None
     parts = [
-        addr_obj.get("streetAddress"),
-        addr_obj.get("addressLocality"),
-        addr_obj.get("addressRegion"),
-        addr_obj.get("postalCode"),
-        addr_obj.get("addressCountry") or "USA",
+        addr.get("streetAddress"),
+        addr.get("addressLocality"),
+        addr.get("addressRegion"),
+        addr.get("postalCode"),
+        addr.get("addressCountry") or "USA",
     ]
     parts = [str(p).strip() for p in parts if p]
     if len(parts) < 3:
@@ -118,56 +141,78 @@ def format_address(addr_obj: dict) -> str | None:
     return ", ".join(parts)
 
 
-class FoodPantriesOrg:
-    name = "FoodPantries.org"
-    home = "https://www.foodpantries.org/"
-    feed_url = "https://www.foodpantries.org/feed/"
-    category = "pantry"
-    id_prefix = "fp"
+class Fetcher:
+    """Caches HTML by URL with a polite delay between live fetches."""
 
-    def fetch_items(self, http: httpx.Client) -> list:
-        headers = {**BROWSER_HEADERS, "Accept": "application/rss+xml,application/xml;q=0.9,*/*;q=0.8"}
-        resp = http.get(self.feed_url, headers=headers)
-        resp.raise_for_status()
-        feed = feedparser.parse(resp.content)
-        if feed.bozo and not feed.entries:
-            raise RuntimeError(f"Failed to parse RSS: {feed.bozo_exception!r}")
-        return feed.entries
+    def __init__(self, http: httpx.Client, cache: Cache, refresh: bool = False) -> None:
+        self.http = http
+        self.cache = cache
+        self.refresh = refresh
+        self._last_request = 0.0
 
-    def parse_entry(
-        self, item, http: httpx.Client, fetch_cache: Cache
-    ) -> tuple[str | None, str, str | None]:
-        """Return (address, description_html, name) — fetched from the listing's JSON-LD."""
-        link = (item.get("link") or "").strip()
-        rss_desc = item.get("description") or item.get("summary") or ""
-        if not link:
-            return None, rss_desc, None
-        cached = fetch_cache.get(link)
-        if cached is None:
-            time.sleep(1)  # polite to foodpantries.org
-            r = http.get(link, headers=BROWSER_HEADERS)
-            r.raise_for_status()
-            cached = r.text
-            fetch_cache.set(link, cached)
-        ld = extract_jsonld_listing(cached)
-        if not ld:
-            return None, rss_desc, None
-        address = format_address(ld.get("address") or {})
-        # Prefer JSON-LD's description (HTML) when present — it's richer than RSS summary
-        desc_html = ld.get("description") or rss_desc
-        name = (ld.get("name") or "").strip() or None
-        return address, desc_html, name
+    def get(self, url: str) -> str:
+        if not self.refresh:
+            cached = self.cache.get(url)
+            if cached is not None:
+                return cached
+        elapsed = time.monotonic() - self._last_request
+        if elapsed < REQ_DELAY:
+            time.sleep(REQ_DELAY - elapsed)
+        r = self.http.get(url, headers=BROWSER_HEADERS)
+        self._last_request = time.monotonic()
+        r.raise_for_status()
+        text = r.text
+        self.cache.set(url, text)
+        return text
+
+
+def parse_links(html: str, prefix: str) -> list[str]:
+    """Return unique absolute URLs whose path starts with the given prefix (e.g. '/st/')."""
+    soup = BeautifulSoup(html, "html.parser")
+    out: list[str] = []
+    seen: set[str] = set()
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        if " " in href or "\n" in href or "\t" in href:
+            continue  # malformed link in source HTML
+        absolute = urljoin(BASE, href)
+        path = urlparse(absolute).path
+        if path.startswith(prefix) and absolute not in seen and absolute.startswith(BASE):
+            seen.add(absolute)
+            out.append(absolute)
+    return out
+
+
+def listing_id(listing_url: str) -> str:
+    """Stable per-listing id from URL slug — each /li/<slug> is unique on foodpantries.org."""
+    slug = urlparse(listing_url).path.rsplit("/", 1)[-1]
+    return "fp-" + slugify(slug)
+
+
+def discover_state_urls(fetcher: Fetcher) -> list[str]:
+    home = fetcher.get(BASE + "/")
+    return parse_links(home, "/st/")
+
+
+def discover_city_urls(fetcher: Fetcher, state_url: str) -> list[str]:
+    html = fetcher.get(state_url)
+    return parse_links(html, "/ci/")
+
+
+def discover_listing_urls(fetcher: Fetcher, city_url: str) -> list[str]:
+    html = fetcher.get(city_url)
+    return parse_links(html, "/li/")
 
 
 def geocode(address: str, cache: Cache, http: httpx.Client) -> dict | None:
     cached = cache.get(address)
     if cached is not None:
         return cached or None
-    time.sleep(1.1)  # Nominatim policy: <= 1 req/sec
+    time.sleep(NOMINATIM_DELAY)
     r = http.get(
-        "https://nominatim.openstreetmap.org/search",
+        NOMINATIM,
         params={"q": address, "format": "json", "limit": 1, "addressdetails": 0},
-        headers={"User-Agent": "SharedPot/1.0 (+https://sharedpot.github.io)", "Accept-Language": "en"},
+        headers=NOMINATIM_HEADERS,
     )
     r.raise_for_status()
     data = r.json()
@@ -179,88 +224,137 @@ def geocode(address: str, cache: Cache, http: httpx.Client) -> dict | None:
     return result
 
 
-def truncate(text: str, n: int = 280) -> str:
-    if len(text) <= n:
-        return text
-    cut = text[: n - 3].rsplit(" ", 1)[0]
-    return cut + "..."
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser()
+    p.add_argument("--state", help="Crawl one state by name (e.g. 'montana'). Default: all states.")
+    p.add_argument("--limit", type=int, help="Stop after this many listings (across all states).")
+    p.add_argument("--refresh-html", action="store_true", help="Ignore HTML cache; refetch live pages.")
+    p.add_argument("--no-geocode", action="store_true", help="Skip geocoding (useful for testing crawl logic).")
+    return p.parse_args()
 
 
 def main() -> int:
+    args = parse_args()
+
     fetch_cache = Cache(FETCH_CACHE)
     geocode_cache = Cache(GEOCODE_CACHE)
 
-    existing = []
-    if OUTPUT.exists():
-        existing = json.loads(OUTPUT.read_text())
+    existing = json.loads(OUTPUT.read_text()) if OUTPUT.exists() else []
     by_id = {e["id"]: e for e in existing}
-
-    sources = [FoodPantriesOrg()]
+    initial = len(by_id)
 
     with httpx.Client(timeout=60.0, follow_redirects=True) as http:
-        for source in sources:
-            print(f"\n=== {source.name} ===", flush=True)
-            try:
-                items = source.fetch_items(http)
-            except Exception as e:
-                print(f"  fetch failed: {e}", file=sys.stderr)
+        fetcher = Fetcher(http, fetch_cache, refresh=args.refresh_html)
+
+        print("Discovering states…", flush=True)
+        state_urls = discover_state_urls(fetcher)
+        print(f"  found {len(state_urls)} states")
+        if args.state:
+            wanted = args.state.lower().replace(" ", "_")
+            state_urls = [u for u in state_urls if urlparse(u).path.endswith(f"/st/{wanted}")]
+            if not state_urls:
+                print(f"State '{args.state}' not found", file=sys.stderr)
                 return 2
+            print(f"  filtered to {state_urls[0]}")
 
-            print(f"  feed items: {len(items)}")
-            for i, item in enumerate(items[:3]):
-                print(f"  sample[{i}]: {item.get('title')!r} -> {item.get('link')!r}")
+        added = updated = skipped_no_addr = skipped_no_geo = errors = 0
+        listings_done = 0
 
-            added = 0
-            kept = 0
-            skipped_no_addr = 0
-            skipped_no_geo = 0
-            for item in items:
-                rss_title = (item.get("title") or "").strip()
-                link = (item.get("link") or "").strip()
-                if not rss_title or not link:
-                    continue
+        for state_url in state_urls:
+            state_name = urlparse(state_url).path.rsplit("/", 1)[-1]
+            print(f"\n=== state: {state_name} ===", flush=True)
+            try:
+                city_urls = discover_city_urls(fetcher, state_url)
+            except httpx.HTTPError as e:
+                print(f"  state page failed: {e}", file=sys.stderr)
+                errors += 1
+                continue
+            print(f"  cities: {len(city_urls)}")
+
+            for city_url in city_urls:
                 try:
-                    addr, desc_html, ld_name = source.parse_entry(item, http, fetch_cache)
+                    listing_urls = discover_listing_urls(fetcher, city_url)
                 except httpx.HTTPError as e:
-                    print(f"  [warn: detail page failed] {rss_title}: {e}", file=sys.stderr)
-                    addr, desc_html, ld_name = None, item.get("description") or "", None
-                if not addr:
-                    skipped_no_addr += 1
-                    continue
-                geo = geocode(addr, geocode_cache, http)
-                if not geo:
-                    skipped_no_geo += 1
+                    print(f"  [city failed] {city_url}: {e}", file=sys.stderr)
+                    errors += 1
                     continue
 
-                title = ld_name or rss_title
-                entry_id = f"{source.id_prefix}-{slugify(title)}"
-                description = truncate(html_to_text(desc_html))
-                entry = {
-                    "id": entry_id,
-                    "category": source.category,
-                    "name": title,
-                    "description": description,
-                    "url": link,
-                    "lat": geo["lat"],
-                    "lng": geo["lng"],
-                    "address": addr,
-                    "source": {"name": source.name, "url": source.home},
-                }
-                if entry_id in by_id:
-                    kept += 1
-                else:
-                    added += 1
-                by_id[entry_id] = entry
+                for listing_url in listing_urls:
+                    if args.limit is not None and listings_done >= args.limit:
+                        print(f"\nLimit of {args.limit} reached.")
+                        break
+                    listings_done += 1
+                    try:
+                        html = fetcher.get(listing_url)
+                    except httpx.HTTPError as e:
+                        print(f"  [listing failed] {listing_url}: {e}", file=sys.stderr)
+                        errors += 1
+                        continue
+
+                    ld = extract_jsonld_listing(html)
+                    if not ld:
+                        skipped_no_addr += 1
+                        continue
+                    address = format_address(ld.get("address") or {})
+                    if not address:
+                        skipped_no_addr += 1
+                        continue
+                    name = (ld.get("name") or "").strip()
+                    if not name:
+                        skipped_no_addr += 1
+                        continue
+
+                    if args.no_geocode:
+                        geo = {"lat": 0.0, "lng": 0.0}
+                    else:
+                        geo = geocode(address, geocode_cache, http)
+                        if not geo:
+                            skipped_no_geo += 1
+                            continue
+
+                    desc_html = ld.get("description") or ""
+                    description = truncate(html_to_text(desc_html))
+                    entry_id = listing_id(listing_url)
+                    entry = {
+                        "id": entry_id,
+                        "category": "pantry",
+                        "name": name,
+                        "description": description,
+                        "url": listing_url,
+                        "lat": geo["lat"],
+                        "lng": geo["lng"],
+                        "address": address,
+                        "source": {"name": "FoodPantries.org", "url": BASE + "/"},
+                    }
+                    if entry_id in by_id:
+                        updated += 1
+                    else:
+                        added += 1
+                    by_id[entry_id] = entry
+
+                if args.limit is not None and listings_done >= args.limit:
+                    break
 
             print(
-                f"  added: {added}, updated/kept: {kept}, "
-                f"skipped (no address): {skipped_no_addr}, "
-                f"skipped (no geocode): {skipped_no_geo}"
+                f"  running totals — listings: {listings_done}, "
+                f"added: {added}, updated: {updated}, "
+                f"no-address: {skipped_no_addr}, no-geocode: {skipped_no_geo}, "
+                f"errors: {errors}"
             )
+
+            # Persist after every state so a kill -INT doesn't lose progress
+            merged = sorted(by_id.values(), key=lambda e: e["id"])
+            OUTPUT.write_text(json.dumps(merged, indent=2, ensure_ascii=False) + "\n")
+
+            if args.limit is not None and listings_done >= args.limit:
+                break
 
     merged = sorted(by_id.values(), key=lambda e: e["id"])
     OUTPUT.write_text(json.dumps(merged, indent=2, ensure_ascii=False) + "\n")
-    print(f"\nWrote {len(merged)} entries to {OUTPUT.relative_to(ROOT)}")
+    print(
+        f"\nDone. {len(merged)} entries total ({len(merged) - initial} new this run). "
+        f"Wrote {OUTPUT.relative_to(ROOT)}."
+    )
     return 0
 
 
