@@ -8,6 +8,7 @@
     "lat": 47.00245,
     "lng": -114.47646,
     "address": "701 Railroad Ave, Alberton, MT, 59820, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -22,6 +23,7 @@
     "lat": 48.08973,
     "lng": -105.64381,
     "address": "230 Main St., Wolf Point, MT, 59201, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -36,6 +38,22 @@
     "lat": 45.21833,
     "lng": -112.63474,
     "address": "131 East Helena Street, Dillon, MT, 59725, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-bigfork-food-bank",
+    "category": "pantry",
+    "name": "Bigfork Food Bank",
+    "description": "Bigfork Food Bank Hours: The first and Third Tuesday of the month 4:00pm - 6:00pm The second and fourth Tuesday of each month 9:00am - 1:00pm Please call Ann Tucker at 250-4546 for more information",
+    "url": "https://www.foodpantries.org/li/bigfork-food-bank",
+    "lat": 48.06793,
+    "lng": -114.09667,
+    "address": "7545 MT Hwy 35, Bigfork, MT, 59911, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -50,6 +68,37 @@
     "lat": 45.78873,
     "lng": -108.49957,
     "address": "2112 4th Ave. N, Billings, MT, 59101, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-boyd-andrew-community-services-elkhorn-treatment-center-59632",
+    "category": "pantry",
+    "name": "Boyd Andrew Community Services Elkhorn Treatment Center",
+    "description": "Provides a food pantry. Pantry hours: 24/7",
+    "url": "https://www.foodpantries.org/li/boyd_andrew_community_services_elkhorn_treatment_center_59632",
+    "lat": 46.2366,
+    "lng": -112.12083,
+    "address": "#1 Riverside Road, Boulder, MT, 59632, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-butte-emergency-food-bank",
+    "category": "pantry",
+    "name": "Butte Emergency Food Bank",
+    "description": "Call Hours: 9:15am and 11:15am Monday through Friday, To arrange an appointment to pick-up food. Pick-up Scheduled: 11:45am Bread is made available at noon.",
+    "url": "https://www.foodpantries.org/li/butte_emergency_food_bank",
+    "lat": 46.01315,
+    "lng": -112.53651,
+    "address": "1019 E. Second Street, Butte, MT, 59701, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -64,6 +113,7 @@
     "lat": 46.00538,
     "lng": -112.52474,
     "address": "1019 E. 2nd St., Butte, MT, 59701, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -78,6 +128,7 @@
     "lat": 46.00538,
     "lng": -112.52474,
     "address": "1019 E 2nd Street, Butte, MT, 59701, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -92,6 +143,7 @@
     "lat": 46.25324,
     "lng": -114.16084,
     "address": "700 North 4th St., Hamilton, MT, 59840, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -106,6 +158,7 @@
     "lat": 45.48422,
     "lng": -108.9702,
     "address": "128 South Main Street, Joliet, MT, 59041, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -120,6 +173,7 @@
     "lat": 45.88887,
     "lng": -104.54844,
     "address": "214 Park St., Ekalaka, MT, 59324, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -134,6 +188,7 @@
     "lat": 47.06594,
     "lng": -109.427,
     "address": "318 W Broadway, Lewistown, MT, 59457, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -148,6 +203,7 @@
     "lat": 48.59003,
     "lng": -109.23164,
     "address": "112 6th St W., Chinook, MT, 59523, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -162,6 +218,7 @@
     "lat": 47.81696,
     "lng": -110.67256,
     "address": "1020 13th St., Fort Benton, MT, 59442, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -176,6 +233,7 @@
     "lat": 48.17887,
     "lng": -114.30945,
     "address": "1896 Airport Rd., Kalispell, MT, 59901, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -190,6 +248,7 @@
     "lat": 46.89139,
     "lng": -114.03186,
     "address": "2811 Latimer, Missoula, MT, 59808, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -204,6 +263,7 @@
     "lat": 46.83574,
     "lng": -114.02003,
     "address": "3801 Russell St., Missoula, MT, 59801, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -218,6 +278,22 @@
     "lat": 45.88715,
     "lng": -106.63091,
     "address": "520 Poplar, Colstrip, MT, 59323, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-columbia-falls-food-bank",
+    "category": "pantry",
+    "name": "Columbia Falls Food Bank",
+    "description": "",
+    "url": "https://www.foodpantries.org/li/columbia-falls-food-bank",
+    "lat": 48.36972,
+    "lng": -114.19158,
+    "address": "82 Railroad St E, Columbia Falls, MT, 59912, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -232,6 +308,22 @@
     "lat": 48.37821,
     "lng": -114.18526,
     "address": "82 Railroad Street, Columbia Falls, MT, 59912, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-community-harvest-food-bank",
+    "category": "pantry",
+    "name": "Community Harvest Food Bank",
+    "description": "",
+    "url": "https://www.foodpantries.org/li/community-harvest-food-bank",
+    "lat": 47.59713,
+    "lng": -115.34431,
+    "address": "704 Preston Ave W, Thompson Falls, MT, 59873, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -246,6 +338,22 @@
     "lat": 45.66548,
     "lng": -108.77419,
     "address": "204 Cedar Ave, Laurel, MT, 59044, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-community-services-fellowship-59853",
+    "category": "pantry",
+    "name": "Community Services Fellowship",
+    "description": "Provides a food pantry. Pantry hours: 406-847-4000 (CSF), Tuesday 12 to 8 pm, Friday 10 to 3 pm",
+    "url": "https://www.foodpantries.org/li/community_services_fellowship_59853",
+    "lat": 47.99512,
+    "lng": -115.78031,
+    "address": "1419 Highway 200, Noxon, MT, 59853, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -260,6 +368,7 @@
     "lat": 48.14553,
     "lng": -104.5172,
     "address": "212 Broadway, Culbertson, MT, 59218, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -274,6 +383,7 @@
     "lat": 46.4062,
     "lng": -105.8287,
     "address": "210 S. Winchester, Miles City, MT, 59808, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -288,6 +398,37 @@
     "lat": 47.10658,
     "lng": -104.7126,
     "address": "112 W Benham Street, Glendive, MT, 59330, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-family-service-59101",
+    "category": "pantry",
+    "name": "Family Service",
+    "description": "Provides a food pantry. Pantry hours: 8 to 5 Mondays through Fridays",
+    "url": "https://www.foodpantries.org/li/family_service_59101",
+    "lat": 45.7875,
+    "lng": -108.49607,
+    "address": "1824 First Ave N., Billings, MT, 59101, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-feed-my-sheep-59501",
+    "category": "pantry",
+    "name": "Feed My Sheep Community Soup Kitchen",
+    "description": "Provides a Soup Kitchen. Free and open to everybody. Soup Kitchen Hours: Monday - Saturday 12:00pm to 12:45pm For more information, please call.",
+    "url": "https://www.foodpantries.org/li/feed_my_sheep_59501",
+    "lat": 48.5537,
+    "lng": -109.6778,
+    "address": "611 Second Street, Havre, MT, 59501, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -302,6 +443,7 @@
     "lat": 47.06421,
     "lng": -109.42457,
     "address": "307 W. Watson, Lewistown, MT, 59457, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -316,6 +458,22 @@
     "lat": 47.51789,
     "lng": -111.27946,
     "address": "1620 12th Ave North, Great Falls, MT, 59401, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-flathead-food-bank-59901",
+    "category": "pantry",
+    "name": "Flathead Food Bank",
+    "description": "Mission is to provide temporary, emergency food assistance to those in need. We operate our main pantry in Kalispell and four satellite pantries around the Flathead Valley. Hours: Monday and Wednesday 8:00am - 3:45pm Tuesday and Thursday 10:00am - 5:45pm For more information,...",
+    "url": "https://www.foodpantries.org/li/flathead_food_bank_59901",
+    "lat": 48.20216,
+    "lng": -114.31532,
+    "address": "1203 Highway 2 West, Kalispell, MT, 59901, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -330,6 +488,7 @@
     "lat": 45.3497,
     "lng": -111.72841,
     "address": "217 william Street, Ennis, MT, 59729, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -344,6 +503,7 @@
     "lat": 45.69479,
     "lng": -111.02848,
     "address": "602 Bond Street, Bozeman, MT, 59715, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -358,6 +518,22 @@
     "lat": 48.36124,
     "lng": -107.87191,
     "address": "133 N 1st Ave E, Malta, MT, 59538, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-gardiner-food-pantry",
+    "category": "pantry",
+    "name": "Gardiner Food Pantry",
+    "description": "Food Pantry Distribution Hours: Tuesdays 1:00 PM to 6:00 PM Additional Information: Food pantry also has a Seniors Commodity Program and a Backpack Program to provide food for the weekend to at-risk children. For more information, contact Linda Gray.",
+    "url": "https://www.foodpantries.org/li/gardiner_food_pantry",
+    "lat": 45.03509,
+    "lng": -110.71265,
+    "address": "108 3rd Street, Gardiner, MT, 59030, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -372,6 +548,7 @@
     "lat": 47.59567,
     "lng": -115.34812,
     "address": "1120 Preston Ave, Thompson Falls, MT, 59873, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -386,6 +563,22 @@
     "lat": 47.51789,
     "lng": -111.27946,
     "address": "1620 12th Avenue N, Great Falls, MT, 59401, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-haven-house-food-bank-59840",
+    "category": "pantry",
+    "name": "Haven House Food Bank",
+    "description": "Provides a food pantry. Pantry hours: 10 to 2 Mondays, Wednesdays and Fridays",
+    "url": "https://www.foodpantries.org/li/haven_house_food_bank_59840",
+    "lat": 46.2472,
+    "lng": -114.15555,
+    "address": "316 N. Third Street #162, Hamilton, MT, 59840, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -400,6 +593,7 @@
     "lat": 45.89315,
     "lng": -111.55181,
     "address": "12 E Cedar, Three Forks, MT, 59752, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -414,6 +608,7 @@
     "lat": 46.59885,
     "lng": -112.01259,
     "address": "1616 Lewis St., Helena, MT, 59601, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -428,6 +623,7 @@
     "lat": 46.5935,
     "lng": -111.97418,
     "address": "805 Colleen, Helena, MT, 59601, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -442,6 +638,22 @@
     "lat": 45.73136,
     "lng": -107.62018,
     "address": "825 3rd St W, Hardin, MT, 59034, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-helping-hands-in-hardin-59034",
+    "category": "pantry",
+    "name": "Helping Hands in Hardin",
+    "description": "Provides a food pantry. Pantry hours: 10-2 Tues. and Thurs. for emergency food; 3-6 pm third Monday CSFP (senior) distribution",
+    "url": "https://www.foodpantries.org/li/helping_hands_in_hardin_59034",
+    "lat": 45.73248,
+    "lng": -107.61203,
+    "address": "825 West Third Street, Hardin, MT, 59034, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -456,6 +668,7 @@
     "lat": 48.05652,
     "lng": -115.95235,
     "address": "27 Railroad Ave, Heron, MT, 59844, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -470,6 +683,22 @@
     "lat": 47.60871,
     "lng": -114.66913,
     "address": "100 Main Street, Hot Springs, MT, 59845, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-house-of-praise-food-pantry-59875",
+    "category": "pantry",
+    "name": "House of Praise Food Pantry",
+    "description": "Provides a food pantry. Pantry hours: 7 to 9 Wednesday nights, first Thursday of the month 7 pm on every Sunday after the service usually from 12 to 2",
+    "url": "https://www.foodpantries.org/li/house_of_praise_food_pantry_59875",
+    "lat": 46.41659,
+    "lng": -114.1501,
+    "address": "2406 N. Highway 93, Victor, MT, 59875, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -484,6 +713,7 @@
     "lat": 48.41343,
     "lng": -115.58069,
     "address": "100 Kootenai River Rd., Libby, MT, 59923, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -498,6 +728,22 @@
     "lat": 48.38288,
     "lng": -115.56094,
     "address": "409 W Balsam St, Libby, MT, 59923, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-lighthouse-christian-home-59901",
+    "category": "pantry",
+    "name": "Lighthouse Christian Home",
+    "description": "Provides a food pantry. Pantry hours: 24/7",
+    "url": "https://www.foodpantries.org/li/lighthouse_christian_home_59901",
+    "lat": 48.20216,
+    "lng": -114.31532,
+    "address": "384 N. Somers Rd., Kalispell, MT, 59901, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -512,6 +758,7 @@
     "lat": 48.35971,
     "lng": -107.87563,
     "address": "110 South 1st W., Malta, MT, 59538, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -526,6 +773,7 @@
     "lat": 48.3544,
     "lng": -107.8761,
     "address": "506 S. 6th St W., Malta, MT, 59538, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -540,6 +788,7 @@
     "lat": 47.4181,
     "lng": -105.59008,
     "address": "Main Street, Circle, MT, 59215, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -554,6 +803,7 @@
     "lat": 46.545,
     "lng": -110.89936,
     "address": "101 W. Crawford, White Sulphur Springs, MT, 59645, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -568,6 +818,7 @@
     "lat": 47.31975,
     "lng": -114.09418,
     "address": "308 Crystal, St Ignatius, MT, 59865, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -582,6 +833,7 @@
     "lat": 46.87803,
     "lng": -114.00143,
     "address": "506 B Toole Ave, Missoula, MT, 59802, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -596,6 +848,7 @@
     "lat": 46.88408,
     "lng": -114.03485,
     "address": "2350 Mullan Rd., Missoula, MT, 59808, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -610,6 +863,7 @@
     "lat": 46.92182,
     "lng": -114.07483,
     "address": "5625 Expressway, Missoula, MT, 59808, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -624,6 +878,7 @@
     "lat": 46.5836,
     "lng": -112.03813,
     "address": "200 Miller St., Helena, MT, 59601, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -638,6 +893,7 @@
     "lat": 45.78744,
     "lng": -108.54912,
     "address": "1301 Avenue D, Billings, MT, 59102, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -652,6 +908,7 @@
     "lat": 48.77616,
     "lng": -104.56616,
     "address": "110 Grant Street, Plentywood, MT, 59254, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -666,6 +923,37 @@
     "lat": 46.39773,
     "lng": -112.73519,
     "address": "505 Main St., Deer Lodge, MT, 59722, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-mt-59754-twin-bridges-mt-helping-hand-food-pantry",
+    "category": "pantry",
+    "name": "Twin Bridges MT Helping Hand Food Pantry",
+    "description": "Twin Bridges MT Helping Hand Food Pantry gathers food and other essentials to meet the needs in our community. Food Pantry Hours: Wednesday 11:00am to 2:00pm and by appointment any time. For more information, please call.",
+    "url": "https://www.foodpantries.org/li/mt_59754_twin-bridges-mt-helping-hand-food-pantry",
+    "lat": 45.54437,
+    "lng": -112.33111,
+    "address": "206 South N Main St, Twin Bridges, MT, 59754, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-mt-59759-sincerely-paul-feeding-his-sheep",
+    "category": "pantry",
+    "name": "Sincerely Paul Feeding His Sheep",
+    "description": "24/7 emergency food and delivery service to elderly, disabled and families in need. For more information, please call.",
+    "url": "https://www.foodpantries.org/li/mt_59759_sincerely-paul-feeding-his-sheep",
+    "lat": 45.87076,
+    "lng": -112.09749,
+    "address": "9 Legion Street, whitehall, MT, 59759, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -680,6 +968,7 @@
     "lat": 48.2043,
     "lng": -114.30768,
     "address": "514 E Washington Street, Kalispell, MT, 59901, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -694,6 +983,7 @@
     "lat": 47.00281,
     "lng": -114.47907,
     "address": "502 5th Street, Alberton, MT, 59820, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -708,6 +998,7 @@
     "lat": 45.65962,
     "lng": -110.56002,
     "address": "202 S 2nd Street, Livingston, MT, 59047, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -722,6 +1013,7 @@
     "lat": 45.65955,
     "lng": -110.55798,
     "address": "301A S Main Street, Livingston, MT, 59047, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -736,6 +1028,7 @@
     "lat": 47.71553,
     "lng": -104.15834,
     "address": "123 West Main St., Sidney, MT, 59270, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -750,6 +1043,7 @@
     "lat": 46.44195,
     "lng": -108.53908,
     "address": "101 2nd St E, Roundup, MT, 59072, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -764,6 +1058,7 @@
     "lat": 46.44238,
     "lng": -108.54503,
     "address": "101 2nd St W., Roundup, MT, 59072, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -778,6 +1073,7 @@
     "lat": 48.11205,
     "lng": -105.19689,
     "address": "509 2nd Ave W., Poplar, MT, 59255, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -792,6 +1088,7 @@
     "lat": 48.39861,
     "lng": -114.34004,
     "address": "251 Flathead Avenue, Whitefish, MT, 59937, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -806,6 +1103,52 @@
     "lat": 48.41145,
     "lng": -114.33905,
     "address": "311 E 1st St., Whitefish, MT, 59937, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-north-west-montana-veterans-stand-down-59901",
+    "category": "pantry",
+    "name": "North West Montana Veterans Stand Down and Food Pantry",
+    "description": "Provides a food pantry. Pantry Hours: Monday - Friday 10:00 am - 3:00 pm For more information, please call.",
+    "url": "https://www.foodpantries.org/li/north_west_montana_veterans_stand_down_59901",
+    "lat": 48.20216,
+    "lng": -114.31532,
+    "address": "1349 Hwy 2 East, Kalispell, MT, 59901, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-noxon-senior-center-59853",
+    "category": "pantry",
+    "name": "Noxon Senior Center",
+    "description": "Provides a food pantry. Pantry hours: Serve meals every Thursday at 12:30 and the second and fourth Mondays of the month at 6 pm",
+    "url": "https://www.foodpantries.org/li/noxon_senior_center_59853",
+    "lat": 47.99512,
+    "lng": -115.78031,
+    "address": "207 Second Street, Noxon, MT, 59853, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-open-gate-ranch-59874",
+    "category": "pantry",
+    "name": "Open Gate Ranch",
+    "description": "Provides a food pantry. Pantry hours: 24/7",
+    "url": "https://www.foodpantries.org/li/open_gate_ranch_59874",
+    "lat": 47.83703,
+    "lng": -115.59807,
+    "address": "21 Alger Rd., Trout Creek, MT, 59874, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -820,6 +1163,7 @@
     "lat": 46.50154,
     "lng": -114.07711,
     "address": "3614 ALC Way, Stevensville, MT, 59870, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -834,6 +1178,7 @@
     "lat": 47.46232,
     "lng": -114.88303,
     "address": "300 Clayton Street, Plains, MT, 59859, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -848,6 +1193,7 @@
     "lat": 47.45763,
     "lng": -114.88371,
     "address": "205 W. Meany, Plains, MT, 59859, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -862,6 +1208,7 @@
     "lat": 47.68713,
     "lng": -114.16196,
     "address": "904 1st Street East, Polson, MT, 59860, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -876,6 +1223,7 @@
     "lat": 47.69326,
     "lng": -114.15605,
     "address": "504 3rd Ave E., Polson, MT, 59860, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -890,6 +1238,7 @@
     "lat": 48.1709,
     "lng": -111.94437,
     "address": "220 S. Front Street, Conrad, MT, 59425, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -904,6 +1253,7 @@
     "lat": 46.87524,
     "lng": -113.99439,
     "address": "535 Ryman St., Missoula, MT, 59807, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -918,6 +1268,7 @@
     "lat": 46.12573,
     "lng": -112.94506,
     "address": "401 Alder Street, Anaconda, MT, 59711, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -932,6 +1283,7 @@
     "lat": 45.63744,
     "lng": -109.25477,
     "address": "428 Pike Ave, Columbus, MT, 59019, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -946,6 +1298,7 @@
     "lat": 47.52937,
     "lng": -114.10611,
     "address": "10 6th Ave SW, Ronan, MT, 59864, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -960,6 +1313,7 @@
     "lat": 47.49548,
     "lng": -111.29861,
     "address": "527 9th Ave South, Great Falls, MT, 59405, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -974,6 +1328,7 @@
     "lat": 48.19529,
     "lng": -114.32667,
     "address": "124 9th Ave West, Kalispell, MT, 59901, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -988,6 +1343,7 @@
     "lat": 48.51001,
     "lng": -111.8506,
     "address": "669 Park Ave., Shelby, MT, 59474, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1002,6 +1358,7 @@
     "lat": 45.87035,
     "lng": -112.0924,
     "address": "313 1st st E, Whitehall, MT, 59759, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1016,6 +1373,7 @@
     "lat": 45.60461,
     "lng": -106.28178,
     "address": "1000 Tongue River Rd., Ashland, MT, 59003, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1030,6 +1388,7 @@
     "lat": 47.50766,
     "lng": -111.31898,
     "address": "426 Central Ave W., Great Falls, MT, 59404, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1044,6 +1403,7 @@
     "lat": 47.19081,
     "lng": -114.8833,
     "address": "611 5th Ave E., Superior, MT, 59872, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1058,6 +1418,22 @@
     "lat": 47.81173,
     "lng": -112.18253,
     "address": "17 Main Avenue North, Choteau, MT, 59422, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-center-pole-59031",
+    "category": "pantry",
+    "name": "The Center Pole",
+    "description": "The food pantry is open from 10:00 AM to 3:00 PM, Monday through Friday.",
+    "url": "https://www.foodpantries.org/li/the_center_pole_59031",
+    "lat": 45.52679,
+    "lng": -107.4166,
+    "address": "916 E Wellknown Buffalo, Garryowen, MT, 59031, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1072,6 +1448,67 @@
     "lat": 48.88231,
     "lng": -115.05095,
     "address": "406 2nd Ave E, Eureka, MT, 59917, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-havre-community-food-bank-59501",
+    "category": "pantry",
+    "name": "The Havre Community Food Bank",
+    "description": "The Havre Food Bank is OPEN from 10 am-1 pm Monday - Tuesday - Thursday & Friday (CLOSED Wednesday). The Food Bank is located on the north side of Havre over the viaduct and across the bridge. The physical address is 453 7th Ave N and the phone number is 265-2007. Please send...",
+    "url": "https://www.foodpantries.org/li/the_havre_community_food_bank_59501",
+    "lat": 48.5537,
+    "lng": -109.6778,
+    "address": "453 Fifth St N., Havre, MT, 59501, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-headwaters-area-food-bank",
+    "category": "pantry",
+    "name": "The Headwaters Area Food Bank",
+    "description": "",
+    "url": "https://www.foodpantries.org/li/the-headwaters-area-food-bank",
+    "lat": 45.89261,
+    "lng": -111.55145,
+    "address": "PO Box 27, Three Forks, MT, 59752, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-headwaters-area-food-bank-livingston",
+    "category": "pantry",
+    "name": "The Headwaters Area Food Bank - Livingston",
+    "description": "",
+    "url": "https://www.foodpantries.org/li/the-headwaters-area-food-bank-livingston",
+    "lat": 45.66239,
+    "lng": -110.56159,
+    "address": "12 Cedar Ln, Livingston, MT, 59047, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-salvation-army-family-services-59401",
+    "category": "pantry",
+    "name": "The Salvation Army Family Services",
+    "description": "Provides a food pantry. Pantry Hours: Monday, Tuesday, Thursday and Friday 1:00pm to 4:00pm For more information, please call.",
+    "url": "https://www.foodpantries.org/li/the_salvation_army_family_services_59401",
+    "lat": 47.50489,
+    "lng": -111.29189,
+    "address": "527 Ninth Ave S., Great Falls, MT, 59401, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1086,6 +1523,7 @@
     "lat": 46.60769,
     "lng": -112.05152,
     "address": "1905 Henderson, Helena, MT, 59624, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1100,6 +1538,7 @@
     "lat": 46.87307,
     "lng": -113.99758,
     "address": "339 W. Broadway, Missoula, MT, 59802, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1114,6 +1553,7 @@
     "lat": 47.17557,
     "lng": -113.47497,
     "address": "200 School Ln, Seeley Lake, MT, 59868, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1128,6 +1568,7 @@
     "lat": 48.39343,
     "lng": -115.5488,
     "address": "206 E. 2nd St., Libby, MT, 59923, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1142,6 +1583,22 @@
     "lat": 44.65863,
     "lng": -111.10212,
     "address": "200 Yellowstone Ave, West Yellowstone, MT, 59758, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-the-yaak-food-cupboard-59935",
+    "category": "pantry",
+    "name": "The Yaak Food Cupboard",
+    "description": "Provides a food pantry. Pantry hours: Twice a month on 2nd and 4th Tuesdays from 2 to 4",
+    "url": "https://www.foodpantries.org/li/the_yaak_food_cupboard_59935",
+    "lat": 48.46152,
+    "lng": -115.89499,
+    "address": "60 Riverview Dr., Troy, MT, 59935, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1156,6 +1613,7 @@
     "lat": 47.59567,
     "lng": -115.34812,
     "address": "704 1/2 Preston, Thompson Falls, MT, 59873, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1170,6 +1628,22 @@
     "lat": 47.59281,
     "lng": -115.31788,
     "address": "1191 Mount Silcox Dr., Thompson Falls, MT, 59873, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-tobacco-valley-community-center-houses-the-senior-center-59917",
+    "category": "pantry",
+    "name": "Tobacco Valley Community Center (houses the senior center)",
+    "description": "Provides a food pantry. Pantry hours: 9 to 6:30 Mondays and Thursdays, 9 to 1 Tuesdays and Wednesdays, meals on wheels Fridays",
+    "url": "https://www.foodpantries.org/li/tobacco_valley_community_center_(houses_the_senior_center)_59917",
+    "lat": 48.87996,
+    "lng": -115.0535,
+    "address": "310 First Ave E., Eureka, MT, 59917, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1184,6 +1658,7 @@
     "lat": 48.87908,
     "lng": -115.05287,
     "address": "109 Dewey Ave, Eureka, MT, 59917, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1198,6 +1673,7 @@
     "lat": 47.83788,
     "lng": -115.59656,
     "address": "#10 Larch St., Trout Creek, MT, 59874, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1212,6 +1688,7 @@
     "lat": 48.46293,
     "lng": -115.89128,
     "address": "301 East Kootenai Ave, Troy, MT, 59935, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1226,6 +1703,7 @@
     "lat": 47.4995,
     "lng": -111.29108,
     "address": "916 5th Ave S, Great Falls, MT, 59405, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1240,6 +1718,7 @@
     "lat": 48.19918,
     "lng": -106.64265,
     "address": "1020 1st Ave N, Glasgow, MT, 59230, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1254,6 +1733,7 @@
     "lat": 48.19151,
     "lng": -106.63571,
     "address": "328 4th Ave S., Glasgow, MT, 59230, USA",
+    "geo_precision": "address",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"
@@ -1268,6 +1748,52 @@
     "lat": 48.02182,
     "lng": -114.22723,
     "address": "140 Bills Rd, Lakeside, MT, 59922, USA",
+    "geo_precision": "address",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-wibaux-food-bank-59353",
+    "category": "pantry",
+    "name": "Wibaux Food Bank",
+    "description": "Provides a food pantry. Pantry hours: 2 to 4 the second Thursday of every month. Also available for emergency boxes at any time.",
+    "url": "https://www.foodpantries.org/li/wibaux_food_bank_59353",
+    "lat": 46.91002,
+    "lng": -104.22152,
+    "address": "201 First Ave SW, Wibaux, MT, 59353, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-wolf-point-thrift-store-and-food-bank-59201",
+    "category": "pantry",
+    "name": "Wolf Point Thrift Store and Food Bank",
+    "description": "Provides a food pantry. Pantry hours: Mondays through Fridays 10 am to 3:30 pm",
+    "url": "https://www.foodpantries.org/li/wolf_point_thrift_store_and_food_bank_59201",
+    "lat": 48.09057,
+    "lng": -105.64056,
+    "address": "300 Highway 25 East, Wolf Point, MT, 59201, USA",
+    "geo_precision": "city",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-youth-homes-59807",
+    "category": "pantry",
+    "name": "Youth Homes",
+    "description": "Provides a food pantry.",
+    "url": "https://www.foodpantries.org/li/youth_homes_59807",
+    "lat": 46.8701,
+    "lng": -113.99527,
+    "address": "P.O. Box 7616, Missoula, MT, 59807, USA",
+    "geo_precision": "city",
     "source": {
       "name": "FoodPantries.org",
       "url": "https://www.foodpantries.org/"

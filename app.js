@@ -90,11 +90,20 @@ function sourceHtml(g) {
   return `<p class="source-attribution">via ${url ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>` : name}</p>`;
 }
 
+function precisionHtml(g) {
+  if (!g.geo_precision || g.geo_precision === "address") return "";
+  const note = g.geo_precision === "postal"
+    ? "Approximate location (zip-code level) — see listing for exact address."
+    : "Approximate location (city-level) — see listing for exact address.";
+  return `<p class="precision-note">${note}</p>`;
+}
+
 function popupHtml(g) {
   return `
     <strong>${escapeHtml(g.name)}</strong><br>
     ${badgeHtml(g)}
     <p style="margin: 0.5rem 0 0.5rem;">${escapeHtml(g.description || "")}</p>
+    ${precisionHtml(g)}
     ${sourceHtml(g)}
     <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">${ctaLabel(g)}</a>
   `;
@@ -222,6 +231,7 @@ function renderList() {
         <span class="address">${escapeHtml(g.address || "")}</span>
       </div>
       <p>${escapeHtml(g.description || "")}</p>
+      ${precisionHtml(g)}
       ${sourceHtml(g)}
       <a class="join-link" href="${escapeHtml(g.url)}" target="_blank" rel="noopener noreferrer">${ctaLabel(g)}</a>
     `;

@@ -204,24 +204,48 @@ def discover_listing_urls(fetcher: Fetcher, city_url: str) -> list[str]:
     return parse_links(html, "/li/")
 
 
-def geocode(address: str, cache: Cache, http: httpx.Client) -> dict | None:
-    cached = cache.get(address)
+def geocode_one(query: str, cache: Cache, http: httpx.Client, **extra_params) -> dict | None:
+    """Single Nominatim query with cache. Returns {lat, lng} or None."""
+    cache_key = json.dumps({"q": query, **extra_params}, sort_keys=True)
+    cached = cache.get(cache_key)
     if cached is not None:
         return cached or None
     time.sleep(NOMINATIM_DELAY)
-    r = http.get(
-        NOMINATIM,
-        params={"q": address, "format": "json", "limit": 1, "addressdetails": 0},
-        headers=NOMINATIM_HEADERS,
-    )
+    params = {"q": query, "format": "json", "limit": 1, "addressdetails": 0, **extra_params}
+    r = http.get(NOMINATIM, params=params, headers=NOMINATIM_HEADERS)
     r.raise_for_status()
     data = r.json()
     if not data:
-        cache.set(address, False)
+        cache.set(cache_key, False)
         return None
     result = {"lat": round(float(data[0]["lat"]), 5), "lng": round(float(data[0]["lon"]), 5)}
-    cache.set(address, result)
+    cache.set(cache_key, result)
     return result
+
+
+def geocode_address(addr_obj: dict, full_str: str, cache: Cache, http: httpx.Client) -> tuple[dict, str] | None:
+    """Try full address, then city+state+zip, then zip+country.
+    Returns (geo, precision) where precision is 'address' | 'city' | 'postal'."""
+    # 1. Full street address
+    geo = geocode_one(full_str, cache, http)
+    if geo:
+        return geo, "address"
+    # 2. City + state + zip + country (drops the street, keeps the locality)
+    locality = addr_obj.get("addressLocality")
+    region = addr_obj.get("addressRegion")
+    postal = addr_obj.get("postalCode")
+    country = addr_obj.get("addressCountry") or "USA"
+    parts = [p for p in (locality, region, postal, country) if p]
+    if len(parts) >= 2:
+        geo = geocode_one(", ".join(str(p) for p in parts), cache, http)
+        if geo:
+            return geo, "city"
+    # 3. Postal code + country (rough but at least puts it on the right county)
+    if postal:
+        geo = geocode_one(f"{postal}, {country}", cache, http, countrycodes="us")
+        if geo:
+            return geo, "postal"
+    return None
 
 
 def parse_args() -> argparse.Namespace:
@@ -305,12 +329,13 @@ def main() -> int:
                         continue
 
                     if args.no_geocode:
-                        geo = {"lat": 0.0, "lng": 0.0}
+                        geo, precision = {"lat": 0.0, "lng": 0.0}, "address"
                     else:
-                        geo = geocode(address, geocode_cache, http)
-                        if not geo:
+                        result = geocode_address(ld.get("address") or {}, address, geocode_cache, http)
+                        if not result:
                             skipped_no_geo += 1
                             continue
+                        geo, precision = result
 
                     desc_html = ld.get("description") or ""
                     description = truncate(html_to_text(desc_html))
@@ -324,6 +349,7 @@ def main() -> int:
                         "lat": geo["lat"],
                         "lng": geo["lng"],
                         "address": address,
+                        "geo_precision": precision,
                         "source": {"name": "FoodPantries.org", "url": BASE + "/"},
                     }
                     if entry_id in by_id:
