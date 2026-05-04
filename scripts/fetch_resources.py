@@ -30,22 +30,28 @@ import feedparser
 import httpx
 from bs4 import BeautifulSoup
 
-UA = "SharedPot/1.0 (+https://sharedpot.github.io)"
+UA = "Mozilla/5.0 (compatible; SharedPot/1.0; +https://sharedpot.github.io)"
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 OUTPUT = ROOT / "food_resources.json"
 GEOCODE_CACHE = SCRIPT_DIR / ".geocode_cache.json"
 FETCH_CACHE = SCRIPT_DIR / ".fetch_cache.json"
 
-# Permissive US street-address regex: number + street name + suffix + ", ST 12345"
-ADDRESS_RE = re.compile(
-    r"(\d{1,6}\s+[\w\.\-'’ ]+?(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|"
-    r"Lane|Ln|Drive|Dr|Way|Court|Ct|Place|Pl|Parkway|Pkwy|Highway|Hwy|"
-    r"Trail|Trl|Circle|Cir|Square|Sq|Terrace|Ter)\.?"
-    r"(?:[\w\.\-'’ ,#]*?)"
-    r",\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?)",
-    re.IGNORECASE,
+# Browser-like headers — foodpantries.org returns 406 to bare requests
+BROWSER_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+}
+
+JSONLD_RE = re.compile(
+    r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+    re.DOTALL | re.IGNORECASE,
 )
+LISTING_TYPES = {"LocalBusiness", "Organization", "Restaurant", "Place", "FoodEstablishment"}
 
 
 class Cache:
@@ -68,17 +74,48 @@ def slugify(s: str) -> str:
     return s[:80] or "entry"
 
 
-def extract_address(text: str) -> str | None:
-    if not text:
-        return None
-    m = ADDRESS_RE.search(text)
-    return m.group(1).strip(" ,") if m else None
-
-
 def html_to_text(html: str) -> str:
     if not html:
         return ""
     return BeautifulSoup(html, "html.parser").get_text(" ", strip=True)
+
+
+def extract_jsonld_listing(html: str) -> dict | None:
+    """Find a JSON-LD block describing the listing (LocalBusiness/Organization/etc.)."""
+    for raw in JSONLD_RE.findall(html):
+        # Their JSON-LD has unescaped newlines/tabs inside string values; collapse whitespace.
+        sanitized = re.sub(r"\s+", " ", raw).strip()
+        try:
+            obj = json.loads(sanitized)
+        except json.JSONDecodeError:
+            continue
+        # @type may be a string or list
+        ld_types = obj.get("@type")
+        if isinstance(ld_types, str):
+            ld_types = [ld_types]
+        if not ld_types:
+            continue
+        if not any(t in LISTING_TYPES for t in ld_types):
+            continue
+        if isinstance(obj.get("address"), dict):
+            return obj
+    return None
+
+
+def format_address(addr_obj: dict) -> str | None:
+    if not isinstance(addr_obj, dict):
+        return None
+    parts = [
+        addr_obj.get("streetAddress"),
+        addr_obj.get("addressLocality"),
+        addr_obj.get("addressRegion"),
+        addr_obj.get("postalCode"),
+        addr_obj.get("addressCountry") or "USA",
+    ]
+    parts = [str(p).strip() for p in parts if p]
+    if len(parts) < 3:
+        return None
+    return ", ".join(parts)
 
 
 class FoodPantriesOrg:
@@ -89,13 +126,8 @@ class FoodPantriesOrg:
     id_prefix = "fp"
 
     def fetch_items(self, http: httpx.Client) -> list:
-        resp = http.get(
-            self.feed_url,
-            headers={
-                "User-Agent": UA,
-                "Accept": "application/rss+xml,application/xml;q=0.9,*/*;q=0.8",
-            },
-        )
+        headers = {**BROWSER_HEADERS, "Accept": "application/rss+xml,application/xml;q=0.9,*/*;q=0.8"}
+        resp = http.get(self.feed_url, headers=headers)
         resp.raise_for_status()
         feed = feedparser.parse(resp.content)
         if feed.bozo and not feed.entries:
@@ -104,24 +136,27 @@ class FoodPantriesOrg:
 
     def parse_entry(
         self, item, http: httpx.Client, fetch_cache: Cache
-    ) -> tuple[str | None, str]:
-        """Return (address, description_text) for one feed item."""
-        desc_html = item.get("description") or item.get("summary") or ""
-        addr = extract_address(html_to_text(desc_html))
-        if addr:
-            return addr, desc_html
+    ) -> tuple[str | None, str, str | None]:
+        """Return (address, description_html, name) — fetched from the listing's JSON-LD."""
         link = (item.get("link") or "").strip()
+        rss_desc = item.get("description") or item.get("summary") or ""
         if not link:
-            return None, desc_html
+            return None, rss_desc, None
         cached = fetch_cache.get(link)
         if cached is None:
             time.sleep(1)  # polite to foodpantries.org
-            r = http.get(link, headers={"User-Agent": UA})
+            r = http.get(link, headers=BROWSER_HEADERS)
             r.raise_for_status()
             cached = r.text
             fetch_cache.set(link, cached)
-        addr = extract_address(html_to_text(cached))
-        return addr, desc_html
+        ld = extract_jsonld_listing(cached)
+        if not ld:
+            return None, rss_desc, None
+        address = format_address(ld.get("address") or {})
+        # Prefer JSON-LD's description (HTML) when present — it's richer than RSS summary
+        desc_html = ld.get("description") or rss_desc
+        name = (ld.get("name") or "").strip() or None
+        return address, desc_html, name
 
 
 def geocode(address: str, cache: Cache, http: httpx.Client) -> dict | None:
@@ -132,7 +167,7 @@ def geocode(address: str, cache: Cache, http: httpx.Client) -> dict | None:
     r = http.get(
         "https://nominatim.openstreetmap.org/search",
         params={"q": address, "format": "json", "limit": 1, "addressdetails": 0},
-        headers={"User-Agent": UA, "Accept-Language": "en"},
+        headers={"User-Agent": "SharedPot/1.0 (+https://sharedpot.github.io)", "Accept-Language": "en"},
     )
     r.raise_for_status()
     data = r.json()
@@ -180,15 +215,15 @@ def main() -> int:
             skipped_no_addr = 0
             skipped_no_geo = 0
             for item in items:
-                title = (item.get("title") or "").strip()
+                rss_title = (item.get("title") or "").strip()
                 link = (item.get("link") or "").strip()
-                if not title or not link:
+                if not rss_title or not link:
                     continue
                 try:
-                    addr, desc_html = source.parse_entry(item, http, fetch_cache)
+                    addr, desc_html, ld_name = source.parse_entry(item, http, fetch_cache)
                 except httpx.HTTPError as e:
-                    print(f"  [warn: detail page failed] {title}: {e}", file=sys.stderr)
-                    addr, desc_html = None, item.get("description") or ""
+                    print(f"  [warn: detail page failed] {rss_title}: {e}", file=sys.stderr)
+                    addr, desc_html, ld_name = None, item.get("description") or "", None
                 if not addr:
                     skipped_no_addr += 1
                     continue
@@ -197,6 +232,7 @@ def main() -> int:
                     skipped_no_geo += 1
                     continue
 
+                title = ld_name or rss_title
                 entry_id = f"{source.id_prefix}-{slugify(title)}"
                 description = truncate(html_to_text(desc_html))
                 entry = {

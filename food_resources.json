@@ -1,0 +1,114 @@
+[
+  {
+    "id": "fp-city-center-of-immanuel-baptist-church-food-pantry",
+    "category": "pantry",
+    "name": "City Center of Immanuel Baptist Church Food Pantry",
+    "description": "Provide food to the followings zip codes: 72201, 72202, 72205, 72207, 72210, 72211, 72212, 72223, 72227 and homeless clients Food Pantry Hours: Call on Monday between 10:00am-1:00pm to schedule your pickup time on Tuesday. Tuesday 10:00am - 2:00pm Closed the 5th Tuesday of...",
+    "url": "https://www.foodpantries.org/li/ar_72211_immanuel-baptist-church-food-pantry",
+    "lat": 34.75692,
+    "lng": -92.39242,
+    "address": "315 N. Shackleford Rd, Little Rock, AR, 72211, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-community-market-of-pottawatomie-county",
+    "category": "pantry",
+    "name": "Community Market of Pottawatomie County",
+    "description": "Food Distribution Hours: Monday: 1:00pm - 5:30pm Tuesday - Senior Only Shopping (60+): 10:00am - 12:00pm Wednesday: 10:00am - 2:30pm Thursday: Closed Friday: 10:00am - 2:30pm Third Saturday of the month: 10:00am - 12:00pm Sunday: Closed Important Note: - When you visit bring...",
+    "url": "https://www.foodpantries.org/li/ok_74801_community-market-of-pottawatomie-county",
+    "lat": 35.32712,
+    "lng": -96.90784,
+    "address": "120 S Center St, Shawnee, OK, 74801, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-first-pentecostal-church-of-jesus-christ-food-pantry",
+    "category": "pantry",
+    "name": "First Pentecostal Church of Jesus Christ Food Pantry",
+    "description": "First Pentecostal Church of Jesus Christ provides a food pantry and other services such as clothing. For more information, please call.",
+    "url": "https://www.foodpantries.org/li/first_pentecostal_church_of_jesus_christ_72116",
+    "lat": 34.7701,
+    "lng": -92.26332,
+    "address": "424 E 17th Street, North Little Rock, AR, 72116, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-food-pantry-ministry-at-white-drive-baptist-church",
+    "category": "pantry",
+    "name": "Food Pantry Ministry at White Drive Baptist Church",
+    "description": "Food Pantry Ministry in Batesville, AR. In order to help sustain families and individuals in the community who are experiencing financial difficulties, they are providing free food every Tuesday from 10:00am-11:30am. The walk-in pantry allows you to choose the items that best...",
+    "url": "https://www.foodpantries.org/li/ar_72501_food-pantry-ministry",
+    "lat": 35.7886,
+    "lng": -91.65588,
+    "address": "445 White Drive, Batesville, AR, 72501, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-grace-episcopal-church-peas-and-grace-food-pantry",
+    "category": "pantry",
+    "name": "Grace Episcopal Church Peas and Grace Food Pantry",
+    "description": "Grace Episcopal Church Peas and Grace  provides a food pantry. Food Pantry hours: Tuesday and Saturday 8:00am -10:00am",
+    "url": "https://www.foodpantries.org/li/grace_episcopal_church_20198",
+    "lat": 38.86193,
+    "lng": -77.77601,
+    "address": "6507 Main Street, The Plains, VA, 20198, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-meagher-county-nutrition-coalition-food-pantry",
+    "category": "pantry",
+    "name": "Meagher County Nutrition Coalition Food Pantry",
+    "description": "Meagher County Nutrition Coalition in White Sulphur Springs, MT, provides a food pantry. Food Pantry hours: 3:30pm to 5:30pm the first and third Wednesday of each month.",
+    "url": "https://www.foodpantries.org/li/meagher_county_nutrition_coalition_59645",
+    "lat": 46.545,
+    "lng": -110.89936,
+    "address": "101 W. Crawford, White Sulphur Springs, MT, 59645, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-seeds-of-grace-inside-allen-creek-community-church",
+    "category": "pantry",
+    "name": "Seeds of Grace (inside Allen Creek Community Church)",
+    "description": "Seeds of Grace offers a limited selection of emergency food pantry items, single food bags, personal hygiene items, and a few cold-weather items. Other Services may include: Limited clothing, supplies for work, help pay for work expenses deemed necessary, classes, budgeting...",
+    "url": "https://www.foodpantries.org/li/wa_98270_allen-creek-community-church",
+    "lat": 48.06235,
+    "lng": -122.17239,
+    "address": "7302 44th Ave NE, Marysville, WA, 98270, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  },
+  {
+    "id": "fp-spirit-of-grace-diabetic-food-pantry",
+    "category": "pantry",
+    "name": "Spirit of Grace Diabetic Food Pantry",
+    "description": "Spirit of Grace Diabetic Food Pantry in West Bloomfield, MI. is a Drive up food pantry for diabetics and their caregivers held once a month on the third Saturday from 10:00am to 12:00pm.",
+    "url": "https://www.foodpantries.org/li/mi_48324_spirit-of-grace-diabetic-food-pantry",
+    "lat": 42.60895,
+    "lng": -83.33146,
+    "address": "2399 Figa Ave, West Bloomfield, MI, 48324, USA",
+    "source": {
+      "name": "FoodPantries.org",
+      "url": "https://www.foodpantries.org/"
+    }
+  }
+]
