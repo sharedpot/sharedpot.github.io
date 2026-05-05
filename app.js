@@ -31,7 +31,32 @@ const cluster = L.markerClusterGroup({
   disableClusteringAtZoom: 14,
   maxClusterRadius: 60,
   chunkedLoading: true,
+  iconCreateFunction: clusterIcon,
 }).addTo(map);
+
+function clusterIcon(c) {
+  const counts = { circle: 0, pantry: 0, "free-food": 0 };
+  for (const m of c.getAllChildMarkers()) {
+    const cat = m.options.category;
+    if (cat in counts) counts[cat] += 1;
+  }
+  const total = counts.circle + counts.pantry + counts["free-food"];
+  // Pick the majority category for coloring; "mixed" if no single category > 60%.
+  let dominant = "mixed";
+  let max = 0;
+  for (const k of Object.keys(counts)) {
+    if (counts[k] > max) { max = counts[k]; dominant = k; }
+  }
+  if (max / total < 0.6) dominant = "mixed";
+  const sizeClass =
+    total < 10 ? "marker-cluster-small" :
+    total < 100 ? "marker-cluster-medium" : "marker-cluster-large";
+  return L.divIcon({
+    html: `<div><span>${total}</span></div>`,
+    className: `marker-cluster ${sizeClass} cluster-${dominant}`,
+    iconSize: L.point(40, 40),
+  });
+}
 
 const listEl = document.getElementById("group-list");
 const searchEl = document.getElementById("search");
@@ -163,7 +188,10 @@ async function loadGroups() {
   state.groups = [...circles, ...foodResources];
 
   for (const g of state.groups) {
-    const m = L.marker([g.lat, g.lng], { icon: markerIcon(g.category) }).bindPopup(popupHtml(g));
+    const m = L.marker([g.lat, g.lng], {
+      icon: markerIcon(g.category),
+      category: g.category,
+    }).bindPopup(popupHtml(g));
     m.on("click", () => highlightInList(g.id));
     state.markers.set(g.id, m);
     cluster.addLayer(m);

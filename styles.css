@@ -277,22 +277,25 @@ body > main {
 .cat-pin.cat-free-food { background: var(--cat-free-food); }
 
 .marker-cluster {
-  background: rgba(230, 107, 61, 0.25);
+  background: transparent;
 }
 .marker-cluster div {
-  background: var(--accent);
   color: white;
   font-weight: 700;
   border: 2px solid white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
 .marker-cluster span { line-height: 30px; }
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large { background: rgba(230, 107, 61, 0.25); }
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div { background: var(--accent); color: white; }
+
+.marker-cluster.cluster-circle    { background: rgba(230, 107, 61, 0.25); }
+.marker-cluster.cluster-pantry    { background: rgba(14, 165, 233, 0.25); }
+.marker-cluster.cluster-free-food { background: rgba(22, 163, 74, 0.25); }
+.marker-cluster.cluster-mixed     { background: rgba(120, 120, 120, 0.30); }
+
+.marker-cluster.cluster-circle div    { background: var(--cat-circle); }
+.marker-cluster.cluster-pantry div    { background: var(--cat-pantry); }
+.marker-cluster.cluster-free-food div { background: var(--cat-free-food); }
+.marker-cluster.cluster-mixed div     { background: #555; }
 
 article.prose {
   width: var(--container);
