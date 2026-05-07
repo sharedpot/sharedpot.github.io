@@ -3,27 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submit a Group · SharedPot</title>
+  <title>Submit a cooking circle · SharedPot</title>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Submit a Group</h1>
-    <p>Add a community chat group to the directory. We'll review and add it within a few days.</p>
-    <nav><a href="index.html">&larr; Back to the map</a></nav>
+    <h1>SharedPot</h1>
+    <p>Submit a cooking circle. We'll review and add it to the map within a few days.</p>
+    <nav>
+      <a href="index.html">&larr; Back to map</a>
+      <a href="about.html">About</a>
+    </nav>
   </header>
 
   <main>
-    <p>Provide an invite link (Telegram, WhatsApp, or Signal) and the area the group covers.</p>
-    <iframe
-      src="https://docs.google.com/forms/d/e/1FAIpQLSfvpKuAvuVtjuzcU0KqbaRiLXHX3wREl1qF2ppltDb4t96Xew/viewform?embedded=true"
-      width="100%"
-      height="900"
-      frameborder="0"
-      title="Submit a cooking circle">
-      Loading&hellip;
-    </iframe>
+    <article class="prose" id="form-wrap">
+      <form
+        id="submit-form"
+        action="https://formsubmit.co/60cf1abc9a3ff6f829e46fa27cd9185a"
+        method="POST"
+      >
+        <!-- FormSubmit config -->
+        <input type="hidden" name="_subject" value="New SharedPot submission">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://sharedpot.github.io/submit.html?ok=1">
+        <!-- honeypot for bots; humans won't see/fill this -->
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+
+        <label for="group-name">Group name <span aria-hidden="true">*</span>
+          <input id="group-name" name="Group name" type="text" required maxlength="120">
+        </label>
+
+        <label for="description">Short description <span aria-hidden="true">*</span>
+          <textarea id="description" name="Description" required maxlength="280" rows="3"
+            placeholder="What does this circle do? When and how often?"></textarea>
+        </label>
+
+        <label for="platform">Platform <span aria-hidden="true">*</span>
+          <select id="platform" name="Platform" required>
+            <option value="">Choose one&hellip;</option>
+            <option>Telegram</option>
+            <option>WhatsApp</option>
+            <option>Signal</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <label for="url">Invite link <span aria-hidden="true">*</span>
+          <input id="url" name="Invite link" type="url" required
+            placeholder="https://t.me/+...  or  https://chat.whatsapp.com/...">
+        </label>
+
+        <label for="area">Area or neighbourhood <span aria-hidden="true">*</span>
+          <input id="area" name="Area" type="text" required
+            placeholder="e.g. Williamsburg, Brooklyn, NY">
+        </label>
+
+        <label for="email">Your email (optional)
+          <input id="email" name="Submitter email" type="email"
+            placeholder="If we have a follow-up question">
+        </label>
+
+        <label for="notes">Anything else? (optional)
+          <textarea id="notes" name="Notes" rows="3"></textarea>
+        </label>
+
+        <button type="submit" class="submit-btn">Submit</button>
+        <p class="form-hint">Required fields marked with *.</p>
+      </form>
+    </article>
+
+    <article class="prose" id="thanks" hidden>
+      <h2>Thanks!</h2>
+      <p>Your submission landed. We'll review it and add it to the map within a few days.</p>
+      <p><a href="index.html">&larr; Back to map</a> &middot; <a href="submit.html">Submit another</a></p>
+    </article>
   </main>
+
+  <script>
+    if (new URLSearchParams(location.search).get("ok") === "1") {
+      document.getElementById("form-wrap").hidden = true;
+      document.getElementById("thanks").hidden = false;
+    }
+  </script>
 </body>
 </html>

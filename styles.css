@@ -339,6 +339,60 @@ article.prose h2 { margin-top: 2rem; }
 article.prose p { line-height: 1.6; }
 article.prose ul { line-height: 1.6; }
 
+#submit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#submit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+#submit-form input[type="text"],
+#submit-form input[type="email"],
+#submit-form input[type="url"],
+#submit-form select,
+#submit-form textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--card-bg);
+  color: var(--text);
+}
+#submit-form input:focus,
+#submit-form select:focus,
+#submit-form textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+#submit-form textarea { resize: vertical; min-height: 4rem; }
+
+.submit-btn {
+  align-self: flex-start;
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.submit-btn:hover { background: var(--accent-hover); }
+
+.form-hint {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
 .join-link,
 .join-link:link,
 .join-link:visited,
