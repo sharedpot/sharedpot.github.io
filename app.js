@@ -2,14 +2,18 @@ const PLATFORMS = ["telegram", "whatsapp", "signal"];
 const CATEGORIES = ["circle", "pantry", "free-food"];
 const STORAGE_KEY = "sharedpot:categories";
 
+const PAGE_SIZE = 50;
+
 const state = {
   groups: [],
-  filtered: [],
+  filtered: [],         // passes search/category/radius
+  filteredVisible: [],  // subset of `filtered` inside the current map viewport
   markers: new Map(),
   userPos: null,
   userMarker: null,
   query: "",
   radiusKm: 0,
+  shownCount: PAGE_SIZE,
   visibleCategories: loadCategoryPrefs(),
 };
 
@@ -202,6 +206,10 @@ async function loadGroups() {
   }
   requestAnimationFrame(() => map.invalidateSize());
   window.addEventListener("resize", () => map.invalidateSize());
+  map.on("moveend zoomend", () => {
+    state.shownCount = PAGE_SIZE;
+    applyVisibleFilter();
+  });
   applyFilters();
 }
 
@@ -231,8 +239,18 @@ function applyFilters() {
   }
 
   state.filtered = result;
-  renderList();
+  state.shownCount = PAGE_SIZE;
   syncMarkerVisibility();
+  applyVisibleFilter();
+}
+
+function applyVisibleFilter() {
+  const bounds = map.getBounds();
+  // L.LatLngBounds.contains accepts [lat, lng] arrays
+  state.filteredVisible = state.filtered.filter((g) =>
+    bounds.contains([g.lat, g.lng])
+  );
+  renderList();
 }
 
 function syncMarkerVisibility() {
@@ -251,14 +269,30 @@ function syncMarkerVisibility() {
 
 function renderList() {
   listEl.innerHTML = "";
-  if (state.filtered.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = "No matches. Try a different search, wider radius, or enable more categories.";
-    li.style.cursor = "default";
-    listEl.appendChild(li);
+  const total = state.filteredVisible.length;
+  const totalAll = state.filtered.length;
+
+  // Header summary
+  const summary = document.createElement("li");
+  summary.className = "list-summary";
+  summary.style.cursor = "default";
+  if (total === 0 && totalAll === 0) {
+    summary.textContent = "No matches. Try a different search, wider radius, or enable more categories.";
+    listEl.appendChild(summary);
     return;
   }
-  for (const g of state.filtered) {
+  if (total === 0) {
+    summary.textContent = `${totalAll.toLocaleString()} match this filter, but none are inside the current map view. Pan or zoom out.`;
+    listEl.appendChild(summary);
+    return;
+  }
+  const showing = Math.min(state.shownCount, total);
+  summary.textContent = total === totalAll
+    ? `Showing ${showing.toLocaleString()} of ${total.toLocaleString()} in view`
+    : `Showing ${showing.toLocaleString()} of ${total.toLocaleString()} in view (${totalAll.toLocaleString()} total match filters)`;
+  listEl.appendChild(summary);
+
+  for (const g of state.filteredVisible.slice(0, state.shownCount)) {
     const li = document.createElement("li");
     li.dataset.id = g.id;
     li.innerHTML = `
@@ -285,6 +319,22 @@ function renderList() {
       highlightInList(g.id);
     });
     listEl.appendChild(li);
+  }
+
+  if (total > state.shownCount) {
+    const more = document.createElement("li");
+    more.className = "list-more";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "load-more-btn";
+    const remaining = total - state.shownCount;
+    btn.textContent = `Show ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString()} remaining)`;
+    btn.addEventListener("click", () => {
+      state.shownCount += PAGE_SIZE;
+      renderList();
+    });
+    more.appendChild(btn);
+    listEl.appendChild(more);
   }
 }
 

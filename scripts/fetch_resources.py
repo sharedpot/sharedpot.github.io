@@ -204,47 +204,124 @@ def discover_listing_urls(fetcher: Fetcher, city_url: str) -> list[str]:
     return parse_links(html, "/li/")
 
 
-def geocode_one(query: str, cache: Cache, http: httpx.Client, **extra_params) -> dict | None:
-    """Single Nominatim query with cache. Returns {lat, lng} or None."""
-    cache_key = json.dumps({"q": query, **extra_params}, sort_keys=True)
-    cached = cache.get(cache_key)
+US_STATE_NAMES = {
+    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
+    "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
+    "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii",
+    "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
+    "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine",
+    "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+    "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska",
+    "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico",
+    "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio",
+    "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island",
+    "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas",
+    "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington",
+    "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming",
+}
+
+
+def state_matches(returned_addr: dict | None, expected: str | None) -> bool:
+    """True if Nominatim's returned address.state matches the expected state abbr."""
+    if not expected:
+        return True
+    expected = expected.strip().upper()
+    expected_full = US_STATE_NAMES.get(expected)
+    if not expected_full:
+        return True  # not a US state we know — give it a pass
+    if not isinstance(returned_addr, dict):
+        return False
+    state = (returned_addr.get("state") or "").strip()
+    iso = (returned_addr.get("ISO3166-2-lvl4") or "").strip().upper()
+    if state.lower() == expected_full.lower():
+        return True
+    if iso == f"US-{expected}":
+        return True
+    return False
+
+
+def geocode_query(
+    cache: Cache,
+    http: httpx.Client,
+    cache_key: dict,
+    api_params: dict,
+    expected_state: str | None,
+) -> dict | None:
+    """Run a Nominatim query with cache and state validation.
+
+    Cache value: {"lat", "lng"} on accepted hit, False on miss/rejection.
+    Returns None on transient network error (does NOT cache the failure).
+    """
+    key = json.dumps(cache_key, sort_keys=True)
+    cached = cache.get(key)
     if cached is not None:
         return cached or None
-    time.sleep(NOMINATIM_DELAY)
-    params = {"q": query, "format": "json", "limit": 1, "addressdetails": 0, **extra_params}
-    r = http.get(NOMINATIM, params=params, headers=NOMINATIM_HEADERS)
-    r.raise_for_status()
-    data = r.json()
-    if not data:
-        cache.set(cache_key, False)
-        return None
-    result = {"lat": round(float(data[0]["lat"]), 5), "lng": round(float(data[0]["lon"]), 5)}
-    cache.set(cache_key, result)
-    return result
+    params = {"format": "jsonv2", "limit": 3, "addressdetails": 1, **api_params}
+    last_err: Exception | None = None
+    for attempt in range(3):
+        time.sleep(NOMINATIM_DELAY * (1 + attempt))  # 1.1s, 2.2s, 3.3s
+        try:
+            r = http.get(NOMINATIM, params=params, headers=NOMINATIM_HEADERS)
+            r.raise_for_status()
+            data = r.json() or []
+            for hit in data:
+                if state_matches(hit.get("address"), expected_state):
+                    result = {"lat": round(float(hit["lat"]), 5), "lng": round(float(hit["lon"]), 5)}
+                    cache.set(key, result)
+                    return result
+            cache.set(key, False)
+            return None
+        except (httpx.HTTPError, httpx.RemoteProtocolError) as e:
+            last_err = e
+            continue
+    print(f"  [warn: geocode failed after retries] {api_params}: {last_err}", file=sys.stderr)
+    return None  # transient — don't cache the failure
 
 
 def geocode_address(addr_obj: dict, full_str: str, cache: Cache, http: httpx.Client) -> tuple[dict, str] | None:
-    """Try full address, then city+state+zip, then zip+country.
-    Returns (geo, precision) where precision is 'address' | 'city' | 'postal'."""
-    # 1. Full street address
-    geo = geocode_one(full_str, cache, http)
+    """Cascade: full street → ZIP+state (structured) → city+state (structured).
+    State match is enforced on every hit; results in the wrong state are rejected.
+    Returns (geo, precision) where precision is 'address' | 'postal' | 'city'."""
+    state = addr_obj.get("addressRegion")
+    postal = addr_obj.get("postalCode")
+    locality = addr_obj.get("addressLocality")
+
+    # 1. Full street address (free-form). Cache key matches the v1 schema so the
+    # ~4k entries that already resolved cleanly hit the cache on rerun.
+    geo = geocode_query(
+        cache, http,
+        cache_key={"q": full_str},
+        api_params={"q": full_str, "countrycodes": "us"},
+        expected_state=state,
+    )
     if geo:
         return geo, "address"
-    # 2. City + state + zip + country (drops the street, keeps the locality)
-    locality = addr_obj.get("addressLocality")
-    region = addr_obj.get("addressRegion")
-    postal = addr_obj.get("postalCode")
-    country = addr_obj.get("addressCountry") or "USA"
-    parts = [p for p in (locality, region, postal, country) if p]
-    if len(parts) >= 2:
-        geo = geocode_one(", ".join(str(p) for p in parts), cache, http)
-        if geo:
-            return geo, "city"
-    # 3. Postal code + country (rough but at least puts it on the right county)
+
+    # 2. ZIP code (structured). We TRUST the ZIP — sometimes the source's claimed
+    # state is wrong but the ZIP is right (e.g. "Antioch, CO, 94509" — 94509 is in
+    # California, the state field is the data error). Don't validate against the
+    # claimed state here; let the ZIP win.
     if postal:
-        geo = geocode_one(f"{postal}, {country}", cache, http, countrycodes="us")
+        geo = geocode_query(
+            cache, http,
+            cache_key={"postalcode": postal, "v": 2},
+            api_params={"postalcode": postal, "country": "US"},
+            expected_state=None,
+        )
         if geo:
             return geo, "postal"
+
+    # 3. City + state (structured)
+    if locality and state:
+        geo = geocode_query(
+            cache, http,
+            cache_key={"city": locality, "state": state, "v": 2},
+            api_params={"city": locality, "state": state, "country": "US"},
+            expected_state=state,
+        )
+        if geo:
+            return geo, "city"
+
     return None
 
 

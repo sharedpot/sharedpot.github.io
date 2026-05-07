@@ -154,7 +154,39 @@ body > main {
   }
 }
 
-#group-list li {
+#group-list li.list-summary {
+  padding: 0.5rem 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: default;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  box-shadow: none;
+}
+
+#group-list li.list-more {
+  border: none;
+  background: transparent;
+  padding: 0.25rem;
+  box-shadow: none;
+}
+.load-more-btn {
+  width: 100%;
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.load-more-btn:hover {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+#group-list li:not(.list-summary):not(.list-more) {
   padding: 0.85rem 1rem;
   border: 1px solid var(--border);
   border-radius: 0.6rem;
