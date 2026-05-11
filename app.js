@@ -2,7 +2,7 @@ const PLATFORMS = ["telegram", "whatsapp", "signal"];
 const CATEGORIES = ["circle", "pantry", "free-food"];
 const STORAGE_KEY = "sharedpot:categories";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 10;
 
 const state = {
   groups: [],
